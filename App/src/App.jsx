@@ -5,7 +5,7 @@ import Menu from './components/layout/Menu'
 import Home from './pages/routepublic/Home'
 import VagasPublicas from './pages/routepublic/VagasPublicas'
 import CadastroVoluntario from './pages/routepublic/CadastroVolunter'
-import Login from './pages/routepublic/Login'
+import LoginPage from './pages/routepublic/LoginPage'
 import Leaderboard from './pages/routepublic/LeaderBoard'
 import DashboardHospital from './pages/routeadmin/DashboardHosp'
 import CriarVaga from './pages/routeadmin/CriarVaga'
@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/vagas" element={<VagasPublicas />} />
         <Route path="/cadastro" element={<CadastroVoluntario />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
 
         {/* Rotas protegidas (hospitais/admins) */}
