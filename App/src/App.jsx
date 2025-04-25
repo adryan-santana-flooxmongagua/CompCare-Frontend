@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import Menu from './components/layout/Menu'
+import Header from './components/layout/Header'
 import Home from './pages/routepublic/Home'
 import VagasPublicas from './pages/routepublic/VagasPublicas'
 import CadastroVoluntario from './pages/routepublic/CadastroVolunter'
@@ -18,7 +18,7 @@ import PrivateRoute from './components/private/PrivateRoute'
 const App = () => {
   return (
     <Router>
-      <Menu />
+      <Header />
       <Routes>
         {/* Rotas públicas */}
         <Route path="/" element={<Home />} />
