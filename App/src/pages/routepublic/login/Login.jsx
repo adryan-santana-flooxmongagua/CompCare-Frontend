@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { auth } from '../../../services/firebaseConfig'; 
+import { auth } from '../../../services/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom'; 
 import './style.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, senha);
       console.log('Login bem-sucedido!');
       setErro('');
-      //redirecionar ou atualizar o estado do app
+      navigate('/'); 
     } catch (error) {
       console.error('Erro ao fazer login:', error.message);
       setErro('Email ou senha inválidos!');
@@ -62,7 +64,7 @@ const Login = () => {
         <button type="submit" className="login-button">Entrar</button>
 
         <p className="login-footer">
-          Você não tem uma conta? <a href="#" className="login-link">Crie a sua conta aqui</a>
+          Você não tem uma conta? <a href="/register" className="login-link">Crie a sua conta aqui</a>
         </p>
       </form>
     </div>

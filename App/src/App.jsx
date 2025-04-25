@@ -23,7 +23,7 @@ const App = () => {
         {/* Rotas públicas */}
         <Route path="/" element={<Home />} />
         <Route path="/vagas" element={<VagasPublicas />} />
-        <Route path="/cadastro" element={<CadastroVoluntario />} />
+        <Route path="/cadastroV" element={<CadastroVoluntario />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
