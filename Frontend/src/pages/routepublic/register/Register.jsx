@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { auth } from '../../../services/firebaseConfig';
+import { auth, db } from '../../../services/firebaseConfig'; // importar o db também!
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { doc, setDoc } from 'firebase/firestore'; // importar Firestore
+import { useNavigate, Link } from 'react-router-dom';
 import './style.css';
 
 const Register = () => {
@@ -10,6 +11,7 @@ const Register = () => {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,13 +27,25 @@ const Register = () => {
       return;
     }
 
+    setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-      await updateProfile(userCredential.user, {
+      const user = userCredential.user;
+
+      // Atualizar nome de exibição
+      await updateProfile(user, {
         displayName: nome
       });
 
-      console.log('Cadastro bem-sucedido!');
+      // Criar um documento no Firestore
+      await setDoc(doc(db, "usuarios", user.uid), {
+        uid: user.uid,
+        nome: nome,
+        email: email,
+        criadoEm: new Date()
+      });
+
+      console.log('Cadastro e criação no Firestore bem-sucedidos!');
       setErro('');
       navigate('/login');
     } catch (error) {
@@ -47,6 +61,7 @@ const Register = () => {
         setErro('Erro ao criar conta.');
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -99,10 +114,12 @@ const Register = () => {
 
         {erro && <p className="login-error">{erro}</p>}
 
-        <button type="submit" className="login-button">Cadastrar</button>
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? 'Cadastrando...' : 'Cadastrar'}
+        </button>
 
         <p className="login-footer">
-          Já tem uma conta? <a href="/login" className="login-link">Faça login aqui</a>
+          Já tem uma conta? <Link to="/login" className="login-link">Faça login aqui</Link>
         </p>
       </form>
     </div>

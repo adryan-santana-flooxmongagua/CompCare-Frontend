@@ -22,7 +22,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, senha);
       console.log('Login bem-sucedido!');
       setErro('');
-      navigate('/'); 
+      navigate('/admin/dashboard'); 
     } catch (error) {
       console.error('Erro ao fazer login:', error.message);
       setErro('Email ou senha inválidos!');
