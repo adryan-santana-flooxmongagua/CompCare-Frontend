@@ -9,7 +9,7 @@ import LoginPage from './pages/routepublic/LoginPage'
 import RegisterPage from './pages/routepublic/RegisterPage'
 import Leaderboard from './pages/routepublic/LeaderBoard'
 import DashboardHospital from './pages/routeadmin/DashboardHosp'
-import CriarVaga from './pages/routeadmin/CriarVaga'
+import CriarVaga from './pages/routeadmin/criarvaga/CriarVaga'
 import GerenciarUsuarios from './pages/routeadmin/GerenciarUsu'
 import NotFound from './pages/NotFound'
 
