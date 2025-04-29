@@ -85,3 +85,18 @@
   color: #444;
   margin: 2px 0;
 }
+
+.vaga-btn {
+  background-color: #0b7935;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.vaga-btn:hover {
+  background-color: #065225;
+}

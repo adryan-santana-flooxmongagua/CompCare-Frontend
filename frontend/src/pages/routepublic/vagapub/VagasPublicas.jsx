@@ -21,6 +21,11 @@ const VagasPublicas = () => {
     fetchVagas();
   }, []);
 
+  const handleCandidatar = (vagaId) => {
+    alert(`Você se candidatou à vaga com ID: ${vagaId}`);
+    //adicionar lógica para enviar a candidatura ao Firestore, etc.
+  };
+
   return (
     <div className="vagas-container">
       <h2 className="vagas-title">Vagas Disponíveis</h2>
@@ -45,6 +50,12 @@ const VagasPublicas = () => {
                 <p className="vaga-status">Status: {vaga.status}</p>
                 <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
                 <p className="vaga-quantity">Vagas: {vaga.qtd_vagas}</p>
+                <button
+                  className="vaga-btn"
+                  onClick={() => handleCandidatar(vaga.id)}
+                >
+                  Quero me candidatar
+                </button>
               </div>
             </div>
           ))}
