@@ -1,49 +1,78 @@
-import React, { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../../services/firebaseConfig';
-import './CriarVaga.css';
+import React, { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../../services/firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../services/firebaseConfig"; // Importe a configuração do Firebase Storage
+import "./CriarVaga.css";
 
 const CriarVaga = () => {
   const [formData, setFormData] = useState({
-    titulodavaga: '',
-    descricao: '',
-    tipo_vaga: '',
-    vl_pontos: '',
-    id_hospital: '',
-    status: 'ativa',
-    qtd_vagas: ''
+    titulodavaga: "",
+    descricao: "",
+    tipo_vaga: "",
+    vl_pontos: "",
+    id_hospital: "",
+    status: "ativa",
+    qtd_vagas: "",
+    image: null, // Adicionando o estado para armazenar a imagem
   });
 
-  const [mensagem, setMensagem] = useState('');
+  const [mensagem, setMensagem] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "image") {
+      setFormData({ ...formData, image: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      await addDoc(collection(db, 'vagas'), {
-        ...formData,
-        vl_pontos: Number(formData.vl_pontos),
-        qtd_vagas: Number(formData.qtd_vagas),
-        iddavaga: crypto.randomUUID(), // ID único para relacionar nas candidaturas
-      });
+      let imageUrl = "";
 
-      setMensagem('Vaga cadastrada com sucesso!');
+      // 1) Faz upload da imagem, se existir
+      if (formData.image) {
+        const storageRef = ref(
+          storage,
+          `vagas/${crypto.randomUUID()}_${formData.image.name}`
+        );
+        const uploadTask = await uploadBytesResumable(
+          storageRef,
+          formData.image
+        );
+        imageUrl = await getDownloadURL(uploadTask.ref);
+      }
+
+      // 2) Prepara os dados a salvar, sem o File
+      const vagaData = {
+        titulodavaga: formData.titulodavaga,
+        descricao: formData.descricao,
+        tipo_vaga: formData.tipo_vaga,
+        vl_pontos: Number(formData.vl_pontos),
+        id_hospital: formData.id_hospital,
+        status: formData.status,
+        qtd_vagas: Number(formData.qtd_vagas),
+        iddavaga: crypto.randomUUID(),
+        imageUrl, // aqui só a string da URL, nunca o File
+      };
+
+      // 3) Salva no Firestore
+      await addDoc(collection(db, "vagas"), vagaData);
+
+      setMensagem("Vaga cadastrada com sucesso!");
       setFormData({
-        titulodavaga: '',
-        descricao: '',
-        tipo_vaga: '',
-        vl_pontos: '',
-        id_hospital: '',
-        status: 'ativa',
-        qtd_vagas: ''
+        /* limpa tudo, inclusive image: null */
       });
     } catch (error) {
-      console.error("Erro ao cadastrar vaga: ", error);
+      console.error("Erro ao cadastrar vaga:", error);
       setMensagem(`Erro ao cadastrar vaga: ${error.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,13 +103,21 @@ const CriarVaga = () => {
 
         <div className="form-group">
           <label>Tipo de Vaga</label>
-          <input
-            type="text"
+          <select
             name="tipo_vaga"
             value={formData.tipo_vaga}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="">Selecione o tipo</option>
+            <option value="cuidados com idosos">Cuidados com idosos</option>
+            <option value="cuidados com jovens">Cuidados com jovens</option>
+            <option value="comunicação">Comunicação</option>
+            <option value="administração">Administração</option>
+            <option value="educação">Educação</option>
+            <option value="limpeza">Limpeza</option>
+            <option value="alimentação">Alimentação</option>
+          </select>
         </div>
 
         <div className="form-group">
@@ -125,8 +162,21 @@ const CriarVaga = () => {
           />
         </div>
 
-        <button type="submit" className="submit-btn">Cadastrar Vaga</button>
+        <div className="form-group">
+          <label>Imagem</label>
+          <input
+            type="file"
+            name="image"
+            onChange={handleChange}
+            accept="image/*"
+          />
+        </div>
+
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? "Cadastrando..." : "Cadastrar Vaga"}
+        </button>
       </form>
+
       {mensagem && <p>{mensagem}</p>}
     </div>
   );

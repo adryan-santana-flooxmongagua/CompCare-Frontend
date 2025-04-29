@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Header from './components/layout/Header'
 import Home from './pages/routepublic/Home'
-import VagasPublicas from './pages/routepublic/VagasPublicas'
+import VagasPublicas from './pages/routepublic/vagapub/VagasPublicas'
 import CadastroVoluntario from './pages/routepublic/CadastroVolunter'
 import LoginPage from './pages/routepublic/LoginPage'
 import RegisterPage from './pages/routepublic/RegisterPage'
