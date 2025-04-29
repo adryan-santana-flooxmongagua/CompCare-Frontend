@@ -80,6 +80,17 @@ const CriarVaga = () => {
     <div className="vaga-container">
       <h2>Cadastrar Nova Vaga</h2>
       <form className="vaga-form" onSubmit={handleSubmit}>
+
+      <div className="form-group">
+          <label>Imagem</label>
+          <input
+            type="file"
+            name="image"
+            onChange={handleChange}
+            accept="image/*"
+          />
+        </div>
+
         <div className="form-group">
           <label>Título da Vaga</label>
           <input
@@ -159,16 +170,6 @@ const CriarVaga = () => {
             value={formData.qtd_vagas}
             onChange={handleChange}
             required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Imagem</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleChange}
-            accept="image/*"
           />
         </div>
 
