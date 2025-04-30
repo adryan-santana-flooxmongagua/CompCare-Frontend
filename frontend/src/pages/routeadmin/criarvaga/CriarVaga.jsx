@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../services/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../services/firebaseConfig"; // Importe a configuração do Firebase Storage
-import "./CriarVaga.css";
+import { storage } from "../../../services/firebaseConfig";
+import AdminSidebar from '../aside/AdminSidebar';
+import './CriarVaga.css';
 
 const CriarVaga = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const CriarVaga = () => {
     id_hospital: "",
     status: "ativa",
     qtd_vagas: "",
-    image: null, // Adicionando o estado para armazenar a imagem
+    image: null,
   });
 
   const [mensagem, setMensagem] = useState("");
@@ -35,20 +36,12 @@ const CriarVaga = () => {
     try {
       let imageUrl = "";
 
-      // 1) Faz upload da imagem, se existir
       if (formData.image) {
-        const storageRef = ref(
-          storage,
-          `vagas/${crypto.randomUUID()}_${formData.image.name}`
-        );
-        const uploadTask = await uploadBytesResumable(
-          storageRef,
-          formData.image
-        );
+        const storageRef = ref(storage, `vagas/${crypto.randomUUID()}_${formData.image.name}`);
+        const uploadTask = await uploadBytesResumable(storageRef, formData.image);
         imageUrl = await getDownloadURL(uploadTask.ref);
       }
 
-      // 2) Prepara os dados a salvar, sem o File
       const vagaData = {
         titulodavaga: formData.titulodavaga,
         descricao: formData.descricao,
@@ -58,15 +51,21 @@ const CriarVaga = () => {
         status: formData.status,
         qtd_vagas: Number(formData.qtd_vagas),
         iddavaga: crypto.randomUUID(),
-        imageUrl, // aqui só a string da URL, nunca o File
+        imageUrl,
       };
 
-      // 3) Salva no Firestore
       await addDoc(collection(db, "vagas"), vagaData);
 
       setMensagem("Vaga cadastrada com sucesso!");
       setFormData({
-        /* limpa tudo, inclusive image: null */
+        titulodavaga: "",
+        descricao: "",
+        tipo_vaga: "",
+        vl_pontos: "",
+        id_hospital: "",
+        status: "ativa",
+        qtd_vagas: "",
+        image: null,
       });
     } catch (error) {
       console.error("Erro ao cadastrar vaga:", error);
@@ -77,108 +76,112 @@ const CriarVaga = () => {
   };
 
   return (
-    <div className="vaga-container">
-      <h2>Cadastrar Nova Vaga</h2>
-      <form className="vaga-form" onSubmit={handleSubmit}>
+    <div className="dashboard-layout">
+      <AdminSidebar />
+      <main className="dashboard-content">
+        <div className="vaga-container">
+          <h2>Cadastrar Nova Vaga</h2>
+          <form className="vaga-form" onSubmit={handleSubmit}>
 
-      <div className="form-group">
-          <label>Imagem</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleChange}
-            accept="image/*"
-          />
+            <div className="form-group">
+              <label>Imagem</label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleChange}
+                accept="image/*"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Título da Vaga</label>
+              <input
+                type="text"
+                name="titulodavaga"
+                value={formData.titulodavaga}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Descrição</label>
+              <textarea
+                name="descricao"
+                value={formData.descricao}
+                onChange={handleChange}
+                required
+              ></textarea>
+            </div>
+
+            <div className="form-group">
+              <label>Tipo de Vaga</label>
+              <select
+                name="tipo_vaga"
+                value={formData.tipo_vaga}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Selecione o tipo</option>
+                <option value="cuidados com idosos">Cuidados com idosos</option>
+                <option value="cuidados com jovens">Cuidados com jovens</option>
+                <option value="comunicação">Comunicação</option>
+                <option value="administração">Administração</option>
+                <option value="educação">Educação</option>
+                <option value="limpeza">Limpeza</option>
+                <option value="alimentação">Alimentação</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Valor em Pontos</label>
+              <input
+                type="number"
+                name="vl_pontos"
+                value={formData.vl_pontos}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>ID do Hospital</label>
+              <input
+                type="text"
+                name="id_hospital"
+                value={formData.id_hospital}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Status</label>
+              <select name="status" value={formData.status} onChange={handleChange}>
+                <option value="ativa">Ativa</option>
+                <option value="pendente">Pendente</option>
+                <option value="finalizado">Finalizado</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Quantidade de Vagas</label>
+              <input
+                type="number"
+                name="qtd_vagas"
+                value={formData.qtd_vagas}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <button type="submit" className="submit-btn" disabled={loading}>
+              {loading ? "Cadastrando..." : "Cadastrar Vaga"}
+            </button>
+          </form>
+          {mensagem && <p>{mensagem}</p>}
         </div>
-
-        <div className="form-group">
-          <label>Título da Vaga</label>
-          <input
-            type="text"
-            name="titulodavaga"
-            value={formData.titulodavaga}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Descrição</label>
-          <textarea
-            name="descricao"
-            value={formData.descricao}
-            onChange={handleChange}
-            required
-          ></textarea>
-        </div>
-
-        <div className="form-group">
-          <label>Tipo de Vaga</label>
-          <select
-            name="tipo_vaga"
-            value={formData.tipo_vaga}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Selecione o tipo</option>
-            <option value="cuidados com idosos">Cuidados com idosos</option>
-            <option value="cuidados com jovens">Cuidados com jovens</option>
-            <option value="comunicação">Comunicação</option>
-            <option value="administração">Administração</option>
-            <option value="educação">Educação</option>
-            <option value="limpeza">Limpeza</option>
-            <option value="alimentação">Alimentação</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Valor em Pontos</label>
-          <input
-            type="number"
-            name="vl_pontos"
-            value={formData.vl_pontos}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>ID do Hospital</label>
-          <input
-            type="text"
-            name="id_hospital"
-            value={formData.id_hospital}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Status</label>
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="ativa">Ativa</option>
-            <option value="pendente">Pendente</option>
-            <option value="finalizado">Finalizado</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label>Quantidade de Vagas</label>
-          <input
-            type="number"
-            name="qtd_vagas"
-            value={formData.qtd_vagas}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button type="submit" className="submit-btn" disabled={loading}>
-          {loading ? "Cadastrando..." : "Cadastrar Vaga"}
-        </button>
-      </form>
-
-      {mensagem && <p>{mensagem}</p>}
+      </main>
     </div>
   );
 };
