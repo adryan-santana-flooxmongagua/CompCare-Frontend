@@ -1,26 +1,27 @@
 .vagas-container {
-  max-width: 100%;
-  margin: 40px auto;
-  padding: 0 20px;
+  background-color: #a2b7e8;
+  padding: 40px 20px;
   font-family: Arial, sans-serif;
+  min-height: 100vh;
 }
 
 .vagas-title {
   text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #ffffff;
 }
 
 .vagas-empty {
   text-align: center;
-  color: #666;
+  color: #eeeeee;
+  font-size: 1.2rem;
 }
 
 .vagas-list {
   display: flex;
+  gap: 20px;
   overflow-x: auto;
-  gap: 16px;
   padding-bottom: 10px;
 }
 
@@ -29,74 +30,82 @@
 }
 
 .vagas-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #c3d2f2;
   border-radius: 4px;
 }
 
 .vagas-list::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #5856e8;
   border-radius: 4px;
 }
 
 .vagas-list::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #5682e8;
 }
 
 .vaga-card {
-  flex: 0 0 280px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  flex: 0 0 300px;
+  background-color: #ffffff;
+  border-left: 4px solid #5856e8;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.vaga-card:hover {
+  transform: translateY(-4px);
 }
 
 .vaga-image {
   width: 100%;
-  height: 150px;
+  height: 180px;
   object-fit: cover;
 }
 
 .vaga-info {
-  padding: 12px;
+  padding: 16px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .vaga-title {
-  font-size: 18px;
-  margin: 0;
-  color: #222;
+  font-size: 1.25rem;
+  margin: 0 0 8px;
+  color: #5856e8;
 }
 
 .vaga-desc {
-  font-size: 14px;
-  color: #555;
+  font-size: 0.95rem;
+  color: #555555;
   flex-grow: 1;
+  margin-bottom: 12px;
 }
 
 .vaga-type,
 .vaga-status,
 .vaga-points,
 .vaga-quantity {
-  font-size: 13px;
-  color: #444;
-  margin: 2px 0;
+  font-size: 0.9rem;
+  color: #444444;
+  margin: 4px 0;
 }
 
 .vaga-btn {
-  background-color: #0b7935;
-  color: #fff;
+  background-color: #5856e8;
+  color: #ffffff;
   border: none;
-  padding: 8px 16px;
-  margin-top: 10px;
+  padding: 10px;
+  margin-top: 12px;
   border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .vaga-btn:hover {
-  background-color: #065225;
+  background-color: #5682e8;
 }

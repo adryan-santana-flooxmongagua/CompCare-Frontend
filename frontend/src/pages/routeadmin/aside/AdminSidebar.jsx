@@ -12,10 +12,10 @@ const AdminSidebar = () => {
         <li onClick={() => navigate('/admin/dashboard')}>Página principal</li>
         <li onClick={() => navigate('/admin/usuarios')}>Gerenciar usuários</li>
         <li onClick={() => navigate('/admin/criar-vaga')}>Criar nova vaga</li>
-        <li onClick={() => navigate('/admin/dashboard')}>Ver vagas abertas</li>
-        <li onClick={() => navigate('/admin/dashboard')}>Candidatos por vaga</li>
-        <li onClick={() => navigate('/admin/dashboard')}>Aprovar voluntários</li>
-        <li onClick={() => navigate('/admin/dashboard')}>Histórico de tarefas</li>
+        <li onClick={() => navigate('/vagas')}>Ver vagas públicas</li> 
+        <li onClick={() => navigate('/admin/candidatos')}>Candidatos</li> 
+        <li onClick={() => navigate('/admin/aprovar-voluntarios')}>Aprovar voluntários</li> 
+        <li onClick={() => navigate('/admin/historico')}>Histórico de tarefas</li> 
       </ul>
     </aside>
   );
