@@ -33,7 +33,7 @@ const App = () => {
 
         {/* Rotas protegidas */}
         <Route path="/admin/dashboard" element={<PrivateRoute><DashboardHospital /></PrivateRoute>} />
-       <Route path="\" element={<PrivateRoute><CriarVaga /></PrivateRoute>} />
+       <Route path="/admin/criar-vaga" element={<PrivateRoute><CriarVaga /></PrivateRoute>} />
         <Route path="/admin/usuarios" element={<PrivateRoute><GerenciarUsuarios /></PrivateRoute>} />
         
         {/* Catch-all */}
