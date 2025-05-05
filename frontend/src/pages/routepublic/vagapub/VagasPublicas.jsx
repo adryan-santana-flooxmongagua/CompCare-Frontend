@@ -8,7 +8,7 @@ const VagasPublicas = () => {
   useEffect(() => {
     const fetchVagas = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/vagas");
+        const response = await fetch("http://localhost:5000/api/vaga/vagas");
         const data = await response.json();
         const vagasAtivas = data.filter(vaga => vaga.status === "ativa");
         setVagas(vagasAtivas);

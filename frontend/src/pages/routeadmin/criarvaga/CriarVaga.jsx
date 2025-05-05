@@ -42,8 +42,10 @@ const CriarVaga = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/vagas", {
+      const response = await fetch("http://localhost:5000/api/vaga/vagas", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,        },
         body: data,
       });
 
