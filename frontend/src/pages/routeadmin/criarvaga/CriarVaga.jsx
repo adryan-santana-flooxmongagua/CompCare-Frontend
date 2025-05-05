@@ -28,7 +28,7 @@ const CriarVaga = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const data = new FormData();
     data.append("titulodavaga", formData.titulodavaga);
     data.append("descricao", formData.descricao);
@@ -40,17 +40,18 @@ const CriarVaga = () => {
     if (formData.image) {
       data.append("image", formData.image);
     }
-
+  
     try {
-      const response = await fetch("http://localhost:5000/api/vaga/vagas", {
+      const response = await fetch("http://localhost:5000/api/vagas/vagas", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,        },
+          Authorization: `Bearer ${localStorage.getItem("token")}`,        
+        },
         body: data,
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         setMensagem("Vaga cadastrada com sucesso!");
         setFormData({
@@ -64,16 +65,15 @@ const CriarVaga = () => {
           image: null,
         });
       } else {
-        setMensagem(`Erro: ${result.error || "Falha ao cadastrar vaga"}`);
+        setMensagem(`Erro: ${result.message || "Falha ao cadastrar vaga"}`);
       }
     } catch (error) {
       console.error("Erro ao cadastrar vaga:", error);
-      setMensagem("Erro ao cadastrar vaga");
+      setMensagem(`Erro ao cadastrar vaga: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="dashboard-layout">
       <AdminSidebar />

@@ -1,37 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../../services/firebaseConfig';
-import AdminSidebar from '../aside/AdminSidebar';
-import './GerenciarUsuarios.css';
+import React, { useEffect, useState } from "react";
+import AdminSidebar from "../aside/AdminSidebar";
+import "./GerenciarUsuarios.css";
 
 const GerenciarUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'usuarios'));
-        const lista = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsuarios(lista);
+        const response = await fetch("http://localhost:5000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Erro ao buscar usuários");
+        }
+
+        setUsuarios(data);
       } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
+        console.error("Erro ao buscar usuários:", error);
+        setErro(error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUsuarios();
-  }, []);
+  }, [token]);
 
   const handleExcluir = async (id) => {
-    if (window.confirm('Deseja realmente excluir este usuário?')) {
-      try {
-        await deleteDoc(doc(db, 'usuarios', id));
-        setUsuarios((prev) => prev.filter((user) => user.id !== id));
-      } catch (error) {
-        console.error('Erro ao excluir usuário:', error);
+    if (!window.confirm("Deseja realmente excluir este usuário?")) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Erro ao excluir usuário");
       }
+
+      setUsuarios((prev) => prev.filter((user) => user._id !== id));
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+      setErro(error.message);
     }
   };
 
@@ -40,31 +62,35 @@ const GerenciarUsuarios = () => {
       <AdminSidebar />
       <main className="dashboard-content">
         <div className="usuarios-container">
-          <h2>Gerenciar Usuários Cadastrados</h2>
-          {usuarios.length === 0 ? (
+          <h2>Gerenciar Voluntarios Cadastrados</h2>
+
+          {loading ? (
+            <p>Carregando usuários...</p>
+          ) : erro ? (
+            <p className="error">{erro}</p>
+          ) : usuarios.length === 0 ? (
             <p>Nenhum usuário encontrado.</p>
           ) : (
             <table className="usuarios-table">
               <thead>
                 <tr>
                   <th>Nome</th>
-                  <th>Email</th>
+                  <th>E-mail</th>
                   <th>Tipo</th>
                   <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {usuarios.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.nome}</td>
-                    <td>{user.email}</td>
-                    <td>{user.tipo}</td>
-                    <td>
-                      <button className="btn-delete" onClick={() => handleExcluir(user.id)}>
-                        Excluir
-                      </button>
-                    </td>
-                  </tr>
+                  <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <button onClick={() => handleExcluir(user._id)}>Excluir</button>
+                  </td>
+                </tr>
+                
                 ))}
               </tbody>
             </table>
