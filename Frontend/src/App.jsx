@@ -5,7 +5,7 @@ import Header from "./components/layout/Header";
 import Homes from "./pages/routepublic/homes/Homes";
 import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntarios/Cadastrovolunteer";
-import Loginpage from "./pages/routepublic/login/Loginpage";
+import Loginpage from "./pages/routepublic/login/Loginpages";
 import Registerpage from "./pages/routepublic/register/Registerpage";
 import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
