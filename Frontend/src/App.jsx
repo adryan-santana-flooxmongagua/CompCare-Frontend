@@ -6,7 +6,7 @@ import Homes from "./pages/routepublic/homes/Homes";
 import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntarios/Cadastrovolunteer";
 import Loginpage from "./pages/routepublic/login/Loginpages";
-import Registerpage from "./pages/routepublic/register/Registerpage";
+import Registerpage from "./pages/routepublic/register/Pageregister";
 import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
