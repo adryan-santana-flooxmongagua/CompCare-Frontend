@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminSidebar from '../aside/AdminSidebar';
-import './DashboardHospital.css';
+import AdminSidebar from '../aside/adminsidebar';
+import './dashboardhospital.css';
 
 const DashboardHospital = () => {
   return (

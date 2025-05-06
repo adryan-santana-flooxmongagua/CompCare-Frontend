@@ -1,5 +1,5 @@
 import React from "react";
-import Register from "./register/Register";
+import Register from "./register/register";
 
 const RegisterPage = () => <Register />;
 

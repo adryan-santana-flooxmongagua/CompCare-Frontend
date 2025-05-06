@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
-import './Vagapub.css';
+import './vagapub.css';
 
 const VagasPublicas = () => {
   const [vagas, setVagas] = useState([]);

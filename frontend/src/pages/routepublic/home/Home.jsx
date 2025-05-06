@@ -1,6 +1,6 @@
 import React from 'react';
 import heroImage from '../../../assets/imgs/images.jpg';
-import './Home.css';
+import './home.css';
 
 const Home = () => {
   return (

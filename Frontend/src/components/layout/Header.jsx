@@ -1,7 +1,7 @@
 // src/components/layout/Header.jsx
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import './Header.css';
+import './header.css';
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
