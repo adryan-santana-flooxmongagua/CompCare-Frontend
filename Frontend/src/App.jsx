@@ -5,14 +5,14 @@ import Header from "./components/layout/Header";
 import Homes from "./pages/routepublic/homes/Homes";
 import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntarios/Cadastrovolunteer";
-import LoginPage from "./pages/routepublic/login/LoginPage";
+import LoginPage from "./pages/routepublic/login/Loginpage";
 import RegisterPage from "./pages/routepublic/register/RegisterPage";
 import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
-import CriarVaga from "./pages/routeadmin/criarvaga/CriarVaga";
+import CriarVaga from "./pages/routeadmin/criarvaga/Criarvaga";
 import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/GerenciarUsu";
-import AprovarVoluntarios from "./pages/routeadmin/aprov/AprovarVoluntarios";
+import AprovarVoluntarios from "./pages/routeadmin/aprov/Aprovarvoluntarios";
 
 import VagasCandidatas from "./pages/routepublic/voluntarios/Vagacand";
 

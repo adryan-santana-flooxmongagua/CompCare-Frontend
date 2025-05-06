@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminSidebar from '../aside/AdminSidebar';
+import AdminSidebar from '../aside/Adminsidebar';
 import './DashboardHospital.css';
 
 const DashboardHospital = () => {

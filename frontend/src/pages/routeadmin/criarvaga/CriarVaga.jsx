@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AdminSidebar from '../aside/AdminSidebar';
+import AdminSidebar from '../aside/Adminsidebar';
 import { API_BASE_URL } from "../../../config/api";
 import './CriarVaga.css';
 
