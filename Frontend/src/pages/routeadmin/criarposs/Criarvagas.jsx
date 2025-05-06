@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AdminSidebar from '../aside/Adminsidebar';
 import { API_BASE_URL } from "../../../config/api";
-import './CriarVaga.css';
+import './Criarvaga.css';
 
 const CriarVaga = () => {
   const [formData, setFormData] = useState({

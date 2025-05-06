@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../aside/Adminsidebar";
 import { API_BASE_URL } from "../../../config/api";
-import "./AprovarVoluntarios.css";
+import "./Adminvo.css";
 
 const AprovarVoluntarios = () => {
   const [candidaturas, setCandidaturas] = useState([]);
