@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Header from "./components/layout/Header";
-import Home from "./pages/routepublic/home/Home";
+import Homes from "./pages/routepublic/homes/Homes";
 import VagasPublicas from "./pages/routepublic/vagapub/VagasPublicas";
 import CadastroVoluntario from "./pages/routepublic/voluntario/CadastroVolunter";
 import LoginPage from "./pages/routepublic/login/LoginPage";
@@ -24,7 +24,7 @@ const App = () => (
     <Header />
     <Routes>
       {/* Rotas públicas */}
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Homes />} />
       <Route path="/vagas" element={<VagasPublicas />} />
       <Route path="/cadastroV" element={<CadastroVoluntario />} />
       <Route path="/login" element={<LoginPage />} />
