@@ -7,7 +7,7 @@ import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntario/Cadastrovolunteer";
 import LoginPage from "./pages/routepublic/login/LoginPage";
 import RegisterPage from "./pages/routepublic/register/RegisterPage";
-import Leaderboard from "./pages/routepublic/voluntario/Leaderboard";
+import Leaderboards from "./pages/routepublic/voluntario/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
 import CriarVaga from "./pages/routeadmin/criarvaga/CriarVaga";
@@ -29,7 +29,7 @@ const App = () => (
       <Route path="/cadastroV" element={<CadastroVoluntario />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="/leaderboard" element={<Leaderboards />} />
       {/* Rotas de admin (precisam de token + role="admin") */}
       <Route
         path="/admin/dashboard"
