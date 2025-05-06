@@ -42,7 +42,7 @@ const CriarVaga = () => {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/api/vagas/vagas", {
+      const response = await fetch("https://compcare-backend.onrender.com/api/vagas/vagas", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,        

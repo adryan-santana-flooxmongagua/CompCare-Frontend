@@ -38,7 +38,7 @@ const GerenciarUsuarios = () => {
     if (!window.confirm("Deseja realmente excluir este usuário?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${id}`, {
+      const response = await fetch(`https://compcare-backend.onrender.com/api/users/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
