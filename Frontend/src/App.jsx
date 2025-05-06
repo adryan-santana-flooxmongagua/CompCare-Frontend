@@ -11,7 +11,7 @@ import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/dashboardhosp/Dashboardhosps";
 import CriarVaga from "./pages/routeadmin/criarposs/Criarvagas";
-import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/GerenciarUsu";
+import GerenciarUsuarios from "./pages/routeadmin/gerenciarusus/Gerenciar";
 import AprovarVoluntarios from "./pages/routeadmin/aprov/Aprovarvoluntarios";
 
 import VagasCandidatas from "./pages/routepublic/voluntarios/Vagacand";
