@@ -1,23 +1,23 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Header from "./components/layout/header";
-import Home from "./pages/routepublic/home/home";
-import VagasPublicas from "./pages/routepublic/vagapub/vagaspublicas";
-import CadastroVoluntario from "./pages/routepublic/voluntario/cadastrovolunter";
-import LoginPage from "./pages/routepublic/loginpage";
-import RegisterPage from "./pages/routepublic/registerpage";
-import Leaderboard from "./pages/routepublic/voluntario/leaderboard";
+import Header from "./components/layout/Header";
+import Home from "./pages/routepublic/home/Home";
+import VagasPublicas from "./pages/routepublic/vagapub/VagasPublicas";
+import CadastroVoluntario from "./pages/routepublic/voluntario/CadastroVolunter";
+import LoginPage from "./pages/routepublic/LoginPage";
+import RegisterPage from "./pages/routepublic/RegisterPage";
+import Leaderboard from "./pages/routepublic/voluntario/LeaderBoard";
 
-import DashboardHospital from "./pages/routeadmin/hospage/dashboardhosp";
-import CriarVaga from "./pages/routeadmin/criarvaga/criarvaga";
-import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/gerenciarusu";
-import AprovarVoluntarios from "./pages/routeadmin/aprov/aprovarvoluntarios";
+import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
+import CriarVaga from "./pages/routeadmin/criarvaga/CriarVaga";
+import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/GerenciarUsu";
+import AprovarVoluntarios from "./pages/routeadmin/aprov/AprovarVoluntarios";
 
-import VagasCandidatas from "./pages/routepublic/voluntario/vagascandidatadas";
+import VagasCandidatas from "./pages/routepublic/voluntario/VagasCandidatadas";
 
-import NotFound from "./pages/notfound";
-import PrivateRoute from "./components/private/privateroute";
+import NotFound from "./pages/NotFound";
+import PrivateRoute from "./components/private/PrivateRoute";
 
 const App = () => (
   <Router>
