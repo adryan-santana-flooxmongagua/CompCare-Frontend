@@ -7,14 +7,14 @@ import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntario/Cadastrovolunteer";
 import LoginPage from "./pages/routepublic/login/LoginPage";
 import RegisterPage from "./pages/routepublic/register/RegisterPage";
-import Leaderboard from "./pages/routepublic/voluntario/LeaderBoard";
+import Leaderboard from "./pages/routepublic/voluntario/Leaderboard";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
 import CriarVaga from "./pages/routeadmin/criarvaga/CriarVaga";
 import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/GerenciarUsu";
 import AprovarVoluntarios from "./pages/routeadmin/aprov/AprovarVoluntarios";
 
-import VagasCandidatas from "./pages/routepublic/voluntario/VagasCandidatadas";
+import VagasCandidatas from "./pages/routepublic/voluntario/Vagascandidatadas";
 
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/private/PrivateRoute";
