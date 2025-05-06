@@ -5,8 +5,8 @@ import Header from "./components/layout/Header";
 import Homes from "./pages/routepublic/homes/Homes";
 import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
 import CadastroVoluntario from "./pages/routepublic/voluntarios/Cadastrovolunteer";
-import LoginPage from "./pages/routepublic/login/Loginpage";
-import RegisterPage from "./pages/routepublic/register/RegisterPage";
+import Loginpage from "./pages/routepublic/login/Loginpage";
+import Registerpage from "./pages/routepublic/register/Registerpage";
 import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
@@ -27,8 +27,8 @@ const App = () => (
       <Route path="/" element={<Homes />} />
       <Route path="/vagas" element={<VagasPublicas />} />
       <Route path="/cadastroV" element={<CadastroVoluntario />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<Loginpage />} />
+      <Route path="/register" element={<Registerpage />} />
       <Route path="/leaderboard" element={<Leaderboards />} />
       {/* Rotas de admin (precisam de token + role="admin") */}
       <Route
