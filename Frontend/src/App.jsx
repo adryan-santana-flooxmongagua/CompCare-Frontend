@@ -5,8 +5,8 @@ import Header from "./components/layout/Header";
 import Home from "./pages/routepublic/home/Home";
 import VagasPublicas from "./pages/routepublic/vagapub/VagasPublicas";
 import CadastroVoluntario from "./pages/routepublic/voluntario/CadastroVolunter";
-import LoginPage from "./pages/routepublic/LoginPage";
-import RegisterPage from "./pages/routepublic/RegisterPage";
+import LoginPage from "./pages/routepublic/loginpage";
+import RegisterPage from "./pages/routepublic/registerpage";
 import Leaderboard from "./pages/routepublic/voluntario/LeaderBoard";
 
 import DashboardHospital from "./pages/routeadmin/hospage/DashboardHosp";
