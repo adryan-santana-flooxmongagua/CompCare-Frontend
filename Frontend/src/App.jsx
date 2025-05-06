@@ -10,7 +10,7 @@ import Registerpage from "./pages/routepublic/register/Pageregister";
 import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
 import DashboardHospital from "./pages/routeadmin/dashboardhosp/Dashboardhosps";
-import CriarVaga from "./pages/routeadmin/criarvaga/Criarvaga";
+import CriarVaga from "./pages/routeadmin/criarposs/Criarvagas";
 import GerenciarUsuarios from "./pages/routeadmin/gerenciarusu/GerenciarUsu";
 import AprovarVoluntarios from "./pages/routeadmin/aprov/Aprovarvoluntarios";
 
