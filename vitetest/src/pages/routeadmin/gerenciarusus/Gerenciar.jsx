@@ -3,21 +3,11 @@ import AdminSidebar from "../aside/Adminsidebar";
 import { API_BASE_URL } from "../../../config/api";
 import "./Gerenciar.css";
 
-const GerenciarVoluntarios = () => {
+const GerenciarUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
-  const [excluindoId, setExcluindoId] = useState(null);
-
   const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
-
-  useEffect(() => {
-    if (role !== "admin") {
-      alert("Acesso negado.");
-      window.location.href = "/";
-    }
-  }, [role]);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -27,7 +17,6 @@ const GerenciarVoluntarios = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -49,8 +38,6 @@ const GerenciarVoluntarios = () => {
   const handleExcluir = async (id) => {
     if (!window.confirm("Deseja realmente excluir este usuário?")) return;
 
-    setExcluindoId(id);
-
     try {
       const response = await fetch(`${API_BASE_URL}/users/${id}`, {
         method: "DELETE",
@@ -58,7 +45,6 @@ const GerenciarVoluntarios = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       const result = await response.json();
 
       if (!response.ok) {
@@ -69,8 +55,6 @@ const GerenciarVoluntarios = () => {
     } catch (error) {
       console.error("Erro ao excluir usuário:", error);
       setErro(error.message);
-    } finally {
-      setExcluindoId(null);
     }
   };
 
@@ -78,8 +62,8 @@ const GerenciarVoluntarios = () => {
     <div className="dashboard-layout">
       <AdminSidebar />
       <main className="dashboard-content">
-      <div className="gerenciar-container">
-          <h2>Gerenciar Voluntários Cadastrados</h2>
+        <div className="usuarios-container">
+          <h2>Gerenciar Voluntarios Cadastrados</h2>
 
           {loading ? (
             <p>Carregando usuários...</p>
@@ -100,19 +84,14 @@ const GerenciarVoluntarios = () => {
               <tbody>
                 {usuarios.map((user) => (
                   <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.role}</td>
-                    <td>
-                      <button
-                        onClick={() => handleExcluir(user._id)}
-                        className="btn-delete"
-                        disabled={excluindoId === user._id}
-                      >
-                        {excluindoId === user._id ? "Excluindo..." : "Excluir"}
-                      </button>
-                    </td>
-                  </tr>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>
+                    <button onClick={() => handleExcluir(user._id)}>Excluir</button>
+                  </td>
+                </tr>
+                
                 ))}
               </tbody>
             </table>
@@ -123,4 +102,4 @@ const GerenciarVoluntarios = () => {
   );
 };
 
-export default GerenciarVoluntarios;
+export default GerenciarUsuarios;

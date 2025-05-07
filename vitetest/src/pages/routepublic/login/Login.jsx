@@ -28,14 +28,11 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log('Response Data:', data); // Logar a resposta para ver a estrutura retornada
 
       if (!response.ok) {
         setErro(data.error || 'Email ou senha inválidos!');
       } else {
         const { token, user } = data;
-        console.log('Token:', token); // Verificar se o token está correto
-        console.log('User:', user); // Verificar se o objeto user está correto
 
         localStorage.setItem('token', token);
         localStorage.setItem('role', user.role);
