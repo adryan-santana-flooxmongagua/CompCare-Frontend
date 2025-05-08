@@ -35,6 +35,42 @@ const VagasCandidatadas = () => {
     fetchCandidaturas();
   }, []);
 
+  const confirmarParticipacao = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/candidaturas/confirmar/${id}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Erro ao confirmar participação");
+
+      setCandidaturas((prev) =>
+        prev.map((c) => (c._id === id ? { ...c, status: 'confirmado' } : c))
+      );
+    } catch (err) {
+      alert("Erro ao confirmar participação");
+    }
+  };
+
+  const excluirCandidatura = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/candidaturas/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Erro ao excluir candidatura");
+
+      setCandidaturas((prev) => prev.filter((c) => c._id !== id));
+    } catch (err) {
+      alert("Erro ao excluir candidatura");
+    }
+  };
+
   return (
     <div className="vagas-container">
       <h2 className="vagas-title">Minhas Candidaturas</h2>
@@ -58,6 +94,18 @@ const VagasCandidatadas = () => {
                 <h3 className="vaga-title">{candidatura.vaga?.titulodavaga || 'Vaga desconhecida'}</h3>
                 <p className="vaga-desc">{candidatura.vaga?.descricao || 'Sem descrição'}</p>
                 <p className="vaga-status">Status da candidatura: <strong>{candidatura.status}</strong></p>
+
+                {candidatura.status === 'aprovado' && (
+                  <button className="vaga-btn confirmar" onClick={() => confirmarParticipacao(candidatura._id)}>
+                    Confirmar Participação
+                  </button>
+                )}
+
+                {candidatura.status === 'recusada' && (
+                 <button className="vaga-btn excluir" onClick={() => excluirCandidatura(candidatura._id)}>
+                 Excluir Candidatura
+               </button>
+                )}
               </div>
             </div>
           ))}
