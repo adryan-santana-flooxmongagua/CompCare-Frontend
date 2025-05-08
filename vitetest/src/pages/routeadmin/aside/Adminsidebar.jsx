@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaTachometerAlt, FaUsers, FaPlus, FaEye, FaUserCheck } from 'react-icons/fa';
 import './Adminside.css';
 
 const AdminSidebar = () => {
@@ -7,14 +8,25 @@ const AdminSidebar = () => {
 
   return (
     <aside className="admin-sidebar">
-      <h2 className="admin-sidebar__title">Admin Panel</h2>
       <ul className="admin-sidebar__nav">
-        <li onClick={() => navigate('/admin/dashboard')}>Página principal</li>
-        <li onClick={() => navigate('/admin/usuarios')}>Gerenciar Voluntarios</li>
-        <li onClick={() => navigate('/admin/criar-vaga')}>Criar nova vaga</li>
-        <li onClick={() => navigate('/vagas')}>Ver vagas públicas</li> 
-        <li onClick={() => navigate('/admin/candidatos')}>Candidatos</li> 
-        <li onClick={() => navigate('/admin/aprovar-voluntarios')}>Aprovar voluntários</li> 
+        <li onClick={() => navigate('/admin/dashboard')}>
+          <FaTachometerAlt className="icon" /> Página principal
+        </li>
+        <li onClick={() => navigate('/admin/usuarios')}>
+          <FaUsers className="icon" /> Gerenciar Voluntários
+        </li>
+        <li onClick={() => navigate('/admin/criar-vaga')}>
+          <FaPlus className="icon" /> Criar nova vaga
+        </li>
+        <li onClick={() => navigate('/admin/statusvaga')}>
+          <FaEye className="icon" /> Vagas criadas
+        </li>
+        <li onClick={() => navigate('/admin/candidatos')}>
+          <FaUserCheck className="icon" /> Candidatos confirmados
+        </li>
+        <li onClick={() => navigate('/admin/aprovar-voluntarios')}>
+          <FaUserCheck className="icon" /> Aprovar voluntários
+        </li>
       </ul>
     </aside>
   );
