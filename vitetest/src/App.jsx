@@ -13,6 +13,8 @@ import DashboardHospital from "./pages/routeadmin/dashboardhosp/Dashboardhosps";
 import CriarVaga from "./pages/routeadmin/criarposs/Criarvagas";
 import GerenciarUsuarios from "./pages/routeadmin/gerenciarusus/Gerenciar";
 import AprovarVoluntarios from "./pages/routeadmin/aprovevollunteer/AproveVolunteer";
+import CandidatosConfirmados from "./pages/routeadmin/candaprov/Candaprov";
+import VagaStatus from "./pages/routeadmin/vagasstatus/Vagastatu";
 
 import VagasCandidatas from "./pages/routepublic/voluntarios/Vagacand";
 
@@ -63,6 +65,23 @@ const App = () => (
           </PrivateRoute>
         }
       />
+      <Route
+        path="/admin/candidatos"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <CandidatosConfirmados />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/statusvaga"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <VagaStatus />
+          </PrivateRoute>
+        }
+      />
+
       {/* Rotas de voluntário (precisam de token + role="volunteer")*/}
       <Route
         path="/voluntario/minhas-candidaturas"

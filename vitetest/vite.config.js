@@ -10,5 +10,8 @@ export default defineConfig({
   },
   define: {
     'process.env': {}  // Garantir compatibilidade com process.env
-  }
+  },
+  esbuild: {
+    jsx: 'transform', // Transforma JSX em arquivos .js
+  },
 });

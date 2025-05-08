@@ -29,19 +29,28 @@ const CriarVaga = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
+    const id_admin = localStorage.getItem("userId"); // recupera o ID do admin
+  
+    if (!id_admin) {
+      setMensagem("Erro: ID do administrador não encontrado.");
+      setLoading(false);
+      return;
+    }
+  
     const data = new FormData();
     data.append("titulodavaga", formData.titulodavaga);
     data.append("descricao", formData.descricao);
     data.append("tipo_vaga", formData.tipo_vaga);
     data.append("vl_pontos", formData.vl_pontos);
+    data.append("id_admin", id_admin); // envia o id_admin
     data.append("id_hospital", formData.id_hospital);
     data.append("status", formData.status);
     data.append("qtd_vagas", formData.qtd_vagas);
     if (formData.image) {
       data.append("image", formData.image);
     }
-
+  
     try {
       const response = await fetch(`${API_BASE_URL}/vagas/vagas`, {
         method: "POST",
@@ -50,9 +59,9 @@ const CriarVaga = () => {
         },
         body: data,
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         setMensagem("Vaga cadastrada com sucesso!");
         setFormData({
@@ -75,7 +84,7 @@ const CriarVaga = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="dashboard-layout">
       <AdminSidebar />

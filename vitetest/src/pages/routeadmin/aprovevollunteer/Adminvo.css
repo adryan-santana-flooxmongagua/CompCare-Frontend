@@ -36,3 +36,31 @@
     background-color: #c0392b;
   }
   
+
+  .recusar-btn {
+    margin-left: 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .recusar-btn:hover {
+    background-color: #d32f2f;
+  }
+
+  
+  .aceitar-btn {
+    margin-left: 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .aceitar-btn:hover {
+    background-color: #388e3c;
+  }
+  
