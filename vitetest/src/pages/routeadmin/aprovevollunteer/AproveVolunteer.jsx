@@ -54,6 +54,27 @@ const AprovarVoluntarios = () => {
     }
   };
 
+  const handleRecusar = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/candidaturas/recusar/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Erro ao recusar candidatura");
+  
+      // Remove do estado após recusa
+      setCandidaturas((prev) => prev.filter((c) => c._id !== id));
+    } catch (error) {
+      console.error("Erro ao recusar candidatura:", error);
+      setErro(error.message);
+    }
+  };
+  
+
   return (
     <div className="dashboard-layout">
       <AdminSidebar />
@@ -84,7 +105,8 @@ const AprovarVoluntarios = () => {
                     <td>{c.userId?.email || "N/A"}</td>
                     <td>{c.vagaId?.titulodavaga || "Vaga desconhecida"}</td>
                     <td>
-                      <button onClick={() => handleAprovar(c._id)}>Aprovar</button>
+                    <button onClick={() => handleAprovar(c._id)} className="aceitar-btn">Aprovar</button>
+                    <button onClick={() => handleRecusar(c._id)} className="recusar-btn">Recusar</button>
                     </td>
                   </tr>
                 ))}
