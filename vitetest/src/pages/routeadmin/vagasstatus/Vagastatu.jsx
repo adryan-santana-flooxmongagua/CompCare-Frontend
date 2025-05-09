@@ -35,7 +35,7 @@ const StatusVaga = () => {
     if (!window.confirm("Tem certeza que deseja excluir esta vaga?")) return;
   
     try {
-      const response = await fetch(`${API_BASE_URL}/vagas/${vagaId}`, {
+      const response = await fetch(`${API_BASE_URL}/vagas/vagas/${vagaId}`, {
         method: "DELETE",
       });
   
