@@ -1,17 +1,23 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from "@tailwindcss/vite";
+import path from 'path'; // necessário para resolver caminhos
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   server: {
-    port: 3000,  // Alterar a porta do servidor
-    open: true,  // Abrir o navegador automaticamente ao iniciar
+    port: 3000,
+    open: true,
   },
   define: {
-    'process.env': {}  // Garantir compatibilidade com process.env
+    'process.env': {},
   },
   esbuild: {
-    jsx: 'transform', // Transforma JSX em arquivos .js
+    jsx: 'transform',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // Adiciona suporte para importações com "@"
+    },
   },
 });
