@@ -27,6 +27,9 @@ const AdminSidebar = () => {
         <li onClick={() => navigate('/admin/aprovar-voluntarios')}>
           <FaUserCheck className="icon" /> Aprovar voluntários
         </li>
+        <li onClick={() => navigate('/admin/NovaTarefa')}>
+          <FaUserCheck className="icon" /> Nova tarefa
+        </li>
       </ul>
     </aside>
   );

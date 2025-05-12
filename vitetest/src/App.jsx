@@ -15,11 +15,13 @@ import GerenciarUsuarios from "./pages/routeadmin/gerenciarusus/Gerenciar";
 import AprovarVoluntarios from "./pages/routeadmin/aprovevollunteer/AproveVolunteer";
 import CandidatosConfirmados from "./pages/routeadmin/candaprov/Candaprov";
 import VagaStatus from "./pages/routeadmin/vagasstatus/Vagastatu";
+import NewTask from "./pages/routeadmin/newtask/Newtask";
 
 import VagasCandidatas from "./pages/routepublic/voluntarios/Vagacand";
 
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/private/PrivateRoute";
+
 
 const App = () => (
   <Router>
@@ -78,6 +80,14 @@ const App = () => (
         element={
           <PrivateRoute requiredRole="admin">
             <VagaStatus />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/admin/NovaTarefa"
+        element={
+          <PrivateRoute requiredRole="admin">
+            <NewTask />
           </PrivateRoute>
         }
       />
