@@ -1,45 +1,49 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Layout
 import Header from "./components/layout/Header";
-import Homes from "./pages/routepublic/homes/Homes";
-import VagasPublicas from "./pages/routepublic/vagapub/Vagapub";
-import CadastroVoluntario from "./pages/routepublic/voluntarios/Cadastrovolunteer";
-import Loginpage from "./pages/routepublic/login/Loginpages";
-import Registerpage from "./pages/routepublic/register/Pageregister";
-import Leaderboards from "./pages/routepublic/voluntarios/Leaderboards";
 
-import DashboardHospital from "./pages/routeadmin/dashboardhosp/Dashboardhosps";
-import CriarVaga from "./pages/routeadmin/criarposs/Criarvagas";
-import GerenciarUsuarios from "./pages/routeadmin/gerenciarusus/Gerenciar";
-import AprovarVoluntarios from "./pages/routeadmin/aprovevollunteer/AproveVolunteer";
-import CandidatosConfirmados from "./pages/routeadmin/candaprov/Candaprov";
-import VagaStatus from "./pages/routeadmin/vagasstatus/Vagastatu";
-import NewTask from "./pages/routeadmin/newtask/Newtask";
+// Páginas públicas
+import Home from "./pages/public/home/Home";
+import PublicVacancy from "./pages/public/vacancies/PublicVacancy";
+import LoginPage from "./pages/auth/Loginpages";
+import RegisterPage from "./pages/auth/Pageregister";
+import Leaderboard from "./pages/volunteer/leaderboard/Leaderboard";
 
-import VagasCandidatas from "./pages/routepublic/voluntarios/Vagacand";
+// Páginas de admin
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import CreateVacancy from "./pages/admin/create-vacancy/CreateVacancy";
+import ManageUsers from "./pages/admin/manage-users/ManageUsers";
+import ApproveVolunteers from "./pages/admin/aprove-vollunteer/ApproveVolunteers";
+import ApprovedVolunteers from "./pages/admin/approved-volunteers/ApprovedVolunteers";
+import VacancyStatus from "./pages/admin/vacancy-status/VacancyStatus";
+import NewTask from "./pages/admin/new-task/NewTask";
 
-import NotFound from "./pages/NotFound";
+// Páginas de voluntário
+import ApplyVacancy from "./pages/volunteer/apply-vacancy/ApplyVacancy";
+
+// Rota protegida e 404
 import PrivateRoute from "./components/private/PrivateRoute";
-
+import NotFound from "./pages/NotFound";
 
 const App = () => (
   <Router>
     <Header />
     <Routes>
-      {/* Rotas públicas */}
-      <Route path="/" element={<Homes />} />
-      <Route path="/vagas" element={<VagasPublicas />} />
-      <Route path="/cadastroV" element={<CadastroVoluntario />} />
-      <Route path="/login" element={<Loginpage />} />
-      <Route path="/register" element={<Registerpage />} />
-      <Route path="/leaderboard" element={<Leaderboards />} />
-      {/* Rotas de admin (precisam de token + role="admin") */}
+      {/* Públicas */}
+      <Route path="/" element={<Home />} />
+      <Route path="/vagas" element={<PublicVacancy />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/leaderboard" element={<Leaderboard />} />
+
+      {/* Admin (protegidas) */}
       <Route
         path="/admin/dashboard"
         element={
           <PrivateRoute requiredRole="admin">
-            <DashboardHospital />
+            <Dashboard />
           </PrivateRoute>
         }
       />
@@ -47,7 +51,7 @@ const App = () => (
         path="/admin/criar-vaga"
         element={
           <PrivateRoute requiredRole="admin">
-            <CriarVaga />
+            <CreateVacancy />
           </PrivateRoute>
         }
       />
@@ -55,7 +59,7 @@ const App = () => (
         path="/admin/usuarios"
         element={
           <PrivateRoute requiredRole="admin">
-            <GerenciarUsuarios />
+            <ManageUsers />
           </PrivateRoute>
         }
       />
@@ -63,7 +67,7 @@ const App = () => (
         path="/admin/aprovar-voluntarios"
         element={
           <PrivateRoute requiredRole="admin">
-            <AprovarVoluntarios />
+            <ApproveVolunteers />
           </PrivateRoute>
         }
       />
@@ -71,20 +75,20 @@ const App = () => (
         path="/admin/candidatos"
         element={
           <PrivateRoute requiredRole="admin">
-            <CandidatosConfirmados />
+            <ApprovedVolunteers />
           </PrivateRoute>
         }
       />
       <Route
-        path="/admin/statusvaga"
+        path="/admin/status-vaga"
         element={
           <PrivateRoute requiredRole="admin">
-            <VagaStatus />
+            <VacancyStatus />
           </PrivateRoute>
         }
       />
       <Route
-        path="/admin/NovaTarefa"
+        path="/admin/nova-tarefa"
         element={
           <PrivateRoute requiredRole="admin">
             <NewTask />
@@ -92,16 +96,17 @@ const App = () => (
         }
       />
 
-      {/* Rotas de voluntário (precisam de token + role="volunteer")*/}
+      {/* Voluntário (protegido) */}
       <Route
         path="/voluntario/minhas-candidaturas"
         element={
           <PrivateRoute requiredRole="volunteer">
-            <VagasCandidatas />
+            <ApplyVacancy />
           </PrivateRoute>
         }
       />
-      {/* Catch-all */}
+
+      {/* Página não encontrada */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   </Router>
