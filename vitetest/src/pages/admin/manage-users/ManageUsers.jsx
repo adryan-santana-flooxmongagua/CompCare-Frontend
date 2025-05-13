@@ -7,6 +7,8 @@ const GerenciarUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+  const [modalAberto, setModalAberto] = useState(false);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -35,11 +37,15 @@ const GerenciarUsuarios = () => {
     fetchUsuarios();
   }, [token]);
 
-  const handleExcluir = async (id) => {
-    if (!window.confirm("Deseja realmente excluir este usuário?")) return;
+  const confirmarExclusao = (userId) => {
+    const user = usuarios.find((u) => u._id === userId);
+    setUsuarioSelecionado(user);
+    setModalAberto(true);
+  };
 
+  const handleExcluir = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/users/${usuarioSelecionado._id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -51,10 +57,13 @@ const GerenciarUsuarios = () => {
         throw new Error(result.error || "Erro ao excluir usuário");
       }
 
-      setUsuarios((prev) => prev.filter((user) => user._id !== id));
+      setUsuarios((prev) => prev.filter((user) => user._id !== usuarioSelecionado._id));
+      setModalAberto(false);
+      setUsuarioSelecionado(null);
     } catch (error) {
       console.error("Erro ao excluir usuário:", error);
       setErro(error.message);
+      setModalAberto(false);
     }
   };
 
@@ -84,19 +93,40 @@ const GerenciarUsuarios = () => {
               <tbody>
                 {usuarios.map((user) => (
                   <tr key={user._id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>
-                    <button onClick={() => handleExcluir(user._id)}>Excluir</button>
-                  </td>
-                </tr>
-                
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.role}</td>
+                    <td>
+                      <button className="btn-delete" onClick={() => confirmarExclusao(user._id)}>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
           )}
         </div>
+
+        {/* Modal de Confirmação */}
+        {modalAberto && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h3>Confirmar Exclusão</h3>
+              <p>
+                Tem certeza que deseja excluir <strong>{usuarioSelecionado?.name}</strong>?
+              </p>
+              <div className="modal-buttons">
+                <button className="btn-cancel" onClick={() => setModalAberto(false)}>
+                  Cancelar
+                </button>
+                <button className="btn-confirm" onClick={handleExcluir}>
+                  Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

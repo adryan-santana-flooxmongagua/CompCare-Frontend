@@ -7,6 +7,9 @@ const AprovarVoluntarios = () => {
   const [candidaturas, setCandidaturas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [actionType, setActionType] = useState(""); // "aprovar" ou "recusar"
+  const [selectedId, setSelectedId] = useState(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -19,7 +22,6 @@ const AprovarVoluntarios = () => {
         });
 
         const data = await response.json();
-
         if (!response.ok) throw new Error(data.message || "Erro ao buscar candidaturas");
 
         setCandidaturas(data);
@@ -34,9 +36,24 @@ const AprovarVoluntarios = () => {
     fetchCandidaturasPendentes();
   }, [token]);
 
-  const handleAprovar = async (id) => {
+  const abrirModal = (id, tipo) => {
+    setSelectedId(id);
+    setActionType(tipo);
+    setModalVisible(true);
+  };
+
+  const fecharModal = () => {
+    setModalVisible(false);
+    setSelectedId(null);
+    setActionType("");
+  };
+
+  const confirmarAcao = async () => {
+    if (!selectedId || !actionType) return;
+
     try {
-      const response = await fetch(`${API_BASE_URL}/candidaturas/aprovar/${id}`, {
+      const endpoint = actionType === "aprovar" ? "aprovar" : "recusar";
+      const response = await fetch(`${API_BASE_URL}/candidaturas/${endpoint}/${selectedId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -44,36 +61,16 @@ const AprovarVoluntarios = () => {
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Erro ao aprovar candidatura");
+      if (!response.ok) throw new Error(result.message || `Erro ao ${actionType} candidatura`);
 
-      // Remove do estado após aprovação
-      setCandidaturas((prev) => prev.filter((c) => c._id !== id));
+      setCandidaturas((prev) => prev.filter((c) => c._id !== selectedId));
+      fecharModal();
     } catch (error) {
-      console.error("Erro ao aprovar candidatura:", error);
+      console.error(`Erro ao ${actionType} candidatura:`, error);
       setErro(error.message);
+      fecharModal();
     }
   };
-
-  const handleRecusar = async (id) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/candidaturas/recusar/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Erro ao recusar candidatura");
-  
-      // Remove do estado após recusa
-      setCandidaturas((prev) => prev.filter((c) => c._id !== id));
-    } catch (error) {
-      console.error("Erro ao recusar candidatura:", error);
-      setErro(error.message);
-    }
-  };
-  
 
   return (
     <div className="dashboard-layout">
@@ -105,13 +102,27 @@ const AprovarVoluntarios = () => {
                     <td>{c.userId?.email || "N/A"}</td>
                     <td>{c.vagaId?.titulodavaga || "Vaga desconhecida"}</td>
                     <td>
-                    <button onClick={() => handleAprovar(c._id)} className="aceitar-btn">Aprovar</button>
-                    <button onClick={() => handleRecusar(c._id)} className="recusar-btn">Recusar</button>
+                      <button onClick={() => abrirModal(c._id, "aprovar")} className="aceitar-btn">Aprovar</button>
+                      <button onClick={() => abrirModal(c._id, "recusar")} className="recusar-btn">Recusar</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          )}
+
+          {/* Modal de Confirmação */}
+          {modalVisible && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <h3>Confirmar Ação</h3>
+                <p>Tem certeza que deseja <strong>{actionType}</strong> esta candidatura?</p>
+                <div className="modal-buttons">
+                  <button onClick={confirmarAcao} className="confirmar-btn">Confirmar</button>
+                  <button onClick={fecharModal} className="cancelar-btn">Cancelar</button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </main>

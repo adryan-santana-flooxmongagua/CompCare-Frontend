@@ -1,58 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './PublicVacancy.css';
 
 const VagasPublicas = () => {
   const [vagas, setVagas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null); // Estado para armazenar o papel do usuário
+  const [userRole, setUserRole] = useState(null);
+  const [candidaturas, setCandidaturas] = useState([]);
 
   useEffect(() => {
-    const fetchVagas = async () => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
       try {
-        const response = await fetch(`${API_BASE_URL}/vagas/vagas`);
-        const data = await response.json();
-        console.log("Vagas recebidas:", data);
-        const vagasAtivas = data.filter(vaga => vaga.status === "ativa");
+        // Decodificar token para pegar o role
+        const decodedToken = JSON.parse(atob(token.split('.')[1]));
+        setUserRole(decodedToken.role);
+
+        // Buscar vagas
+        const vagasResponse = await fetch(`${API_BASE_URL}/vagas/vagas`);
+        const vagasData = await vagasResponse.json();
+        const vagasAtivas = vagasData.filter(v => v.status === 'ativa');
         setVagas(vagasAtivas);
+
+        // Buscar candidaturas do usuário
+        const candidaturasResponse = await fetch(`${API_BASE_URL}/candidaturas/minhas`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const candidaturasData = await candidaturasResponse.json();
+        const idsDasVagasCandidatadas = candidaturasData.map(c => c.vagaId);
+        setCandidaturas(idsDasVagasCandidatadas);
       } catch (error) {
-        console.error("Erro ao buscar vagas:", error);
+        console.error("Erro ao buscar dados:", error);
+        toast.error("Erro ao carregar dados.");
       } finally {
         setLoading(false);
       }
     };
 
-    // Função para decodificar o token JWT e obter o papel do usuário
-    const fetchUserRole = () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decodifica o payload do JWT
-          setUserRole(decodedToken.role); // Supondo que o campo "role" esteja presente no token
-        } catch (error) {
-          console.error("Erro ao decodificar o token:", error);
-        }
-      }
-    };
-
-    fetchVagas();
-    fetchUserRole(); // Chama a função para obter o papel do usuário
+    fetchData();
   }, []);
 
   const handleCandidatar = async (vagaId) => {
     if (userRole !== 'volunteer') {
-      alert('Você precisa ser um voluntário para se candidatar a vagas.');
+      toast.warning('Você precisa ser um voluntário para se candidatar a vagas.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      toast.warning('Você precisa estar logado para se candidatar.');
       return;
     }
 
     try {
-      const token = localStorage.getItem('token');
-  
-      if (!token) {
-        alert('Você precisa estar logado para se candidatar.');
-        return;
-      }
-  
       const response = await fetch(`${API_BASE_URL}/candidaturas`, {
         method: "POST",
         headers: {
@@ -61,22 +65,33 @@ const VagasPublicas = () => {
         },
         body: JSON.stringify({ vagaId }),
       });
-  
+
       const result = await response.json();
-  
+
       if (response.ok) {
-        alert(result.message); // Sucesso
+        toast.success(result.message);
+        setCandidaturas(prev => [...prev, vagaId]);
       } else {
-        alert(result.message); // Já se candidatou ou outro erro tratado
+        toast.error(result.message);
       }
     } catch (error) {
       console.error("Erro ao se candidatar:", error);
-      alert("Erro ao se candidatar.");
+      toast.error("Erro ao se candidatar.");
     }
   };
 
   return (
     <div className="vagas-container">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
+
       <h2 className="vagas-title">Vagas Disponíveis</h2>
 
       {loading ? (
@@ -101,12 +116,17 @@ const VagasPublicas = () => {
                 <p className="vaga-status">Status: {vaga.status}</p>
                 <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
                 <p className="vaga-quantity">Vagas: {vaga.qtd_vagas}</p>
-                <button
-                  className="vaga-btn"
-                  onClick={() => handleCandidatar(vaga._id)}
-                >
-                  Quero me candidatar
-                </button>
+
+                {candidaturas.includes(vaga._id) ? (
+                  <p className="vaga-candidatado">Você já se candidatou.</p>
+                ) : (
+                  <button
+                    className="vaga-btn"
+                    onClick={() => handleCandidatar(vaga._id)}
+                  >
+                    Quero me candidatar
+                  </button>
+                )}
               </div>
             </div>
           ))}

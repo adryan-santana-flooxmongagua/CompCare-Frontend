@@ -8,6 +8,8 @@ const StatusVaga = () => {
   const [vagaEditando, setVagaEditando] = useState(null);
   const [vagas, setVagas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [vagaParaExcluir, setVagaParaExcluir] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const fetchVagas = async () => {
     try {
@@ -29,29 +31,35 @@ const StatusVaga = () => {
   useEffect(() => {
     fetchVagas();
   }, []);
-  
 
-  const handleDelete = async (vagaId) => {
-    if (!window.confirm("Tem certeza que deseja excluir esta vaga?")) return;
-  
+  const handleDeleteClick = (vagaId) => {
+    setVagaParaExcluir(vagaId);
+    setShowModal(true);
+  };
+
+  const confirmarExclusao = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/vagas/vagas/${vagaId}`, {
-        method: "DELETE",
-      });
-  
+      const response = await fetch(
+        `${API_BASE_URL}/vagas/vagas/${vagaParaExcluir}`,
+        {
+          method: "DELETE",
+        }
+      );
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Erro ao deletar vaga.");
       }
-  
-      // Atualiza a lista após deletar
+
       fetchVagas();
     } catch (error) {
       console.error("Erro ao deletar vaga:", error.message);
       alert("Erro ao deletar vaga.");
+    } finally {
+      setShowModal(false);
+      setVagaParaExcluir(null);
     }
   };
-  
 
   const handleEdit = (vagaId) => {
     const vagaSelecionada = vagas.find((vaga) => vaga._id === vagaId);
@@ -59,8 +67,8 @@ const StatusVaga = () => {
   };
 
   const handleSave = () => {
-    fetchVagas(); // Recarrega a lista
-    setVagaEditando(null); // Fecha o formulário
+    fetchVagas();
+    setVagaEditando(null);
   };
 
   const handleCloseForm = () => {
@@ -70,13 +78,37 @@ const StatusVaga = () => {
   return (
     <div className="dashboard-layout">
       <AdminSidebar />
+
+      {/* Modal de Confirmação */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Deseja realmente excluir esta vaga?</h3>
+            <div className="modal-buttons">
+              <button
+                className="btn-cancel"
+                onClick={() => setShowModal(false)}
+              >
+                Cancelar
+              </button>
+              <button className="btn-confirm" onClick={confirmarExclusao}>
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="dashboard-content">
         {vagaEditando ? (
-          <FormVaga
-            vagaParaEditar={vagaEditando}
-            onClose={handleCloseForm}
-            onSave={handleSave}
-          />
+          <div className="form-edit-inline">
+            <h2>Editando Vaga</h2>
+            <FormVaga
+              vagaParaEditar={vagaEditando}
+              onClose={handleCloseForm}
+              onSave={handleSave}
+            />
+          </div>
         ) : (
           <div className="usuarios-container">
             <h2>Status das Vagas</h2>
@@ -103,7 +135,9 @@ const StatusVaga = () => {
                       <p className="vaga-type">Tipo: {vaga.tipo_vaga}</p>
                       <p className="vaga-status">Status: {vaga.status}</p>
                       <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
-                      <p className="vaga-quantity">Qtd. Vagas: {vaga.qtd_vagas}</p>
+                      <p className="vaga-quantity">
+                        Qtd. Vagas: {vaga.qtd_vagas}
+                      </p>
                       <p className="vaga-candidatos">
                         Voluntários Alistados: {vaga.candidatos?.length || 0}
                       </p>
@@ -115,7 +149,7 @@ const StatusVaga = () => {
                           Editar
                         </button>
                         <button
-                          onClick={() => handleDelete(vaga._id)}
+                          onClick={() => handleDeleteClick(vaga._id)}
                           className="delete-btn"
                         >
                           Excluir
