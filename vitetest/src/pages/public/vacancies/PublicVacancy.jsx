@@ -11,38 +11,39 @@ const VagasPublicas = () => {
   const [candidaturas, setCandidaturas] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
+  const fetchData = async () => {
+    const token = localStorage.getItem('token');
 
-      try {
-        // Decodificar token para pegar o role
+    try {
+      // Buscar vagas públicas
+      const vagasResponse = await fetch(`${API_BASE_URL}/vagas/vagas`);
+      const vagasData = await vagasResponse.json();
+      const vagasAtivas = vagasData.filter(v => v.status === 'ativa');
+      setVagas(vagasAtivas);
+
+      // Se estiver logado, buscar candidaturas
+      if (token) {
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
         setUserRole(decodedToken.role);
 
-        // Buscar vagas
-        const vagasResponse = await fetch(`${API_BASE_URL}/vagas/vagas`);
-        const vagasData = await vagasResponse.json();
-        const vagasAtivas = vagasData.filter(v => v.status === 'ativa');
-        setVagas(vagasAtivas);
-
-        // Buscar candidaturas do usuário
         const candidaturasResponse = await fetch(`${API_BASE_URL}/candidaturas/minhas`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const candidaturasData = await candidaturasResponse.json();
         const idsDasVagasCandidatadas = candidaturasData.map(c => c.vagaId);
         setCandidaturas(idsDasVagasCandidatadas);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-        toast.error("Erro ao carregar dados.");
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+      toast.error("Erro ao carregar dados.");
+    } finally {
+      setLoading(false); // Isso precisa rodar mesmo sem token
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
+
 
   const handleCandidatar = async (vagaId) => {
     if (userRole !== 'volunteer') {
