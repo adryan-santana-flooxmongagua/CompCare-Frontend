@@ -1,57 +1,52 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "../aside/Aside";
-import { API_BASE_URL } from "../../../config/api";
+import TaskModal from "../new-task/modal/TaskModal";
+import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
 import "./Newtask.css";
 
 const NewTask = () => {
   const [vagas, setVagas] = useState([]);
-  const [vagaSelecionada, setVagaSelecionada] = useState("");
+  const [vagaSelecionada, setVagaSelecionada] = useState(null);
   const [descricao, setDescricao] = useState("");
   const [frequencia, setFrequencia] = useState("diaria");
   const [tarefas, setTarefas] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchVagas = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/vagas/vagas`);
-        const data = await res.json();
-        setVagas(data);
-      } catch (error) {
-        console.error("Erro ao buscar vagas:", error);
-      }
-    };
     fetchVagas();
   }, []);
 
-  useEffect(() => {
-    const fetchTarefas = async () => {
-      if (!vagaSelecionada) return;
-    
-      try {
-        const token = localStorage.getItem("token");
-    
-        const res = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-    
-        const data = await res.json();
-        setTarefas(data);
-      } catch (error) {
-        console.error("Erro ao buscar tarefas:", error);
-      }
-    };
+  const fetchVagas = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/vagas/vagas`);
+      const data = await res.json();
+      setVagas(data);
+    } catch (error) {
+      console.error("Erro ao buscar vagas:", error);
+    }
+  };
 
-    fetchTarefas();
-  }, [vagaSelecionada]);
+  const openModal = async (vaga) => {
+    setVagaSelecionada(vaga);
+    setIsModalOpen(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/tasks/vaga/${vaga._id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setTarefas(data);
+    } catch (error) {
+      console.error("Erro ao buscar tarefas:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const token = localStorage.getItem("token");
-
       const res = await fetch(`${API_BASE_URL}/tasks/criar`, {
         method: "POST",
         headers: {
@@ -59,48 +54,42 @@ const NewTask = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          vagaId: vagaSelecionada,
+          vagaId: vagaSelecionada._id,
           descricao,
           frequencia,
         }),
       });
 
       if (!res.ok) {
-        throw new Error("Erro ao criar tarefa");
+        const erro = await res.json();
+        throw new Error(erro.message || "Erro ao criar tarefa");
       }
 
-      alert("Tarefa criada com sucesso!");
       setDescricao("");
       setFrequencia("diaria");
 
-      // Atualiza tarefas após criação
-      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada}`);
+      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`);
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
-      console.error(error);
-      alert("Erro ao criar tarefa.");
+      console.error("Erro ao criar tarefa:", error.message);
+      alert(`Erro: ${error.message}`);
     }
   };
-
 
   const handleDelete = async (taskId) => {
     try {
       const token = localStorage.getItem("token");
-  
       const res = await fetch(`${API_BASE_URL}/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
-      if (!res.ok) {
-        throw new Error("Erro ao excluir tarefa");
-      }
-  
-      // Atualiza a lista após excluir
-      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada}`);
+
+      if (!res.ok) throw new Error("Erro ao excluir tarefa");
+
+      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`);
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
@@ -108,94 +97,46 @@ const NewTask = () => {
       alert("Erro ao excluir tarefa.");
     }
   };
-  
-  const handleEdit = (task) => {
-    setDescricao(task.descricao);
-    setFrequencia(task.frequencia);
-  };
-
-  
 
   return (
     <div className="dashboard-layout">
       <AdminSidebar />
       <main className="dashboard-content">
-        <div className="new-task-container">
-          <div className="new-task-form">
-            <h2 className="form-title">Gerenciar Tarefas por Vaga</h2>
-            <p className="form-description">
-              Crie tarefas específicas para cada vaga e acompanhe as já cadastradas abaixo.
-            </p>
-
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Vaga</label>
-                <select
-                  value={vagaSelecionada}
-                  onChange={(e) => setVagaSelecionada(e.target.value)}
-                  required
-                >
-                  <option value="">Selecione uma vaga</option>
-                  {vagas.map((vaga) => (
-                    <option key={vaga._id} value={vaga._id}>
-                      {vaga.titulodavaga}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Descrição da Tarefa</label>
-                <textarea
-                  value={descricao}
-                  onChange={(e) => setDescricao(e.target.value)}
-                  rows={3}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Frequência</label>
-                <select
-                  value={frequencia}
-                  onChange={(e) => setFrequencia(e.target.value)}
-                  required
-                >
-                  <option value="diaria">Diária</option>
-                  <option value="semanal">Semanal</option>
-                  <option value="mensal">Mensal</option>
-                </select>
-              </div>
-
-              <button type="submit" className="submit-btn">
-                Criar Tarefa
+        <div className="vagas-grid">
+          {vagas.map((vaga) => (
+            <div key={vaga._id} className="vaga-card">
+              {vaga.imageUrl ? (
+                <img src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`} alt={vaga.titulodavaga} />
+              ) : (
+                <div className="vaga-no-image">Sem imagem</div>
+              )}
+              <h3>{vaga.titulodavaga}</h3>
+              <button className="ver-detalhes-btn" onClick={() => openModal(vaga)}>
+                Ver Detalhes
               </button>
-            </form>
-
-            {vagaSelecionada && (
-              <div className="task-list">
-                <h3 className="task-list-title">Tarefas da vaga selecionada</h3>
-                {tarefas.length > 0 ? (
-                 <ul>
-                 {tarefas.map((task) => (
-                   <li key={task._id}>
-                     <strong>Frequência:</strong> {task.frequencia} <br />
-                     <strong>Descrição:</strong> {task.descricao} <br />
-                     <button onClick={() => handleEdit(task)}>Editar</button>
-                     <button onClick={() => handleDelete(task._id)}>Excluir</button>
-                   </li>
-                 ))}
-               </ul>
-                ) : (
-                  <p>Nenhuma tarefa cadastrada para esta vaga.</p>
-                )}
-              </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
+
+        {isModalOpen && vagaSelecionada && (
+          <TaskModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            vaga={vagaSelecionada}
+            descricao={descricao}
+            setDescricao={setDescricao}
+            frequencia={frequencia}
+            setFrequencia={setFrequencia}
+            tarefas={tarefas}
+            onSubmit={handleSubmit}
+            onDelete={handleDelete}
+          />
+        )}
       </main>
     </div>
   );
 };
 
 export default NewTask;
+
+
