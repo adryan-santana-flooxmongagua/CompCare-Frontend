@@ -11,39 +11,36 @@ const VagasPublicas = () => {
   const [candidaturas, setCandidaturas] = useState([]);
 
   useEffect(() => {
-  const fetchData = async () => {
-    const token = localStorage.getItem('token');
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
 
-    try {
-      // Buscar vagas públicas
-      const vagasResponse = await fetch(`${API_BASE_URL}/vagas/vagas`);
-      const vagasData = await vagasResponse.json();
-      const vagasAtivas = vagasData.filter(v => v.status === 'ativa');
-      setVagas(vagasAtivas);
+      try {
+        const vagasResponse = await fetch(`${API_BASE_URL}/vagas/vagas`);
+        const vagasData = await vagasResponse.json();
+        const vagasAtivas = vagasData.filter(v => v.status === 'ativa');
+        setVagas(vagasAtivas);
 
-      // Se estiver logado, buscar candidaturas
-      if (token) {
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        setUserRole(decodedToken.role);
+        if (token) {
+          const decodedToken = JSON.parse(atob(token.split('.')[1]));
+          setUserRole(decodedToken.role);
 
-        const candidaturasResponse = await fetch(`${API_BASE_URL}/candidaturas/minhas`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        const candidaturasData = await candidaturasResponse.json();
-        const idsDasVagasCandidatadas = candidaturasData.map(c => c.vagaId);
-        setCandidaturas(idsDasVagasCandidatadas);
+          const candidaturasResponse = await fetch(`${API_BASE_URL}/candidaturas/minhas`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const candidaturasData = await candidaturasResponse.json();
+          const idsDasVagasCandidatadas = candidaturasData.map(c => c.vagaId);
+          setCandidaturas(idsDasVagasCandidatadas);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+        toast.error("Erro ao carregar dados.");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-      toast.error("Erro ao carregar dados.");
-    } finally {
-      setLoading(false); // Isso precisa rodar mesmo sem token
-    }
-  };
+    };
 
-  fetchData();
-}, []);
-
+    fetchData();
+  }, []);
 
   const handleCandidatar = async (vagaId) => {
     if (userRole !== 'volunteer') {
@@ -83,15 +80,7 @@ const VagasPublicas = () => {
 
   return (
     <div className="vagas-container">
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
 
       <h2 className="vagas-title">Vagas Disponíveis</h2>
 
@@ -113,10 +102,13 @@ const VagasPublicas = () => {
               <div className="vaga-info">
                 <h3 className="vaga-title">{vaga.titulodavaga}</h3>
                 <p className="vaga-desc">{vaga.descricao}</p>
-                <p className="vaga-type">Tipo: {vaga.tipo_vaga}</p>
-                <p className="vaga-status">Status: {vaga.status}</p>
-                <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
-                <p className="vaga-quantity">Vagas: {vaga.qtd_vagas}</p>
+
+                <div className="vaga-info-adicional">
+                  <p><strong>Tipo:</strong> {vaga.tipo_vaga}</p>
+                  <p><strong>Status:</strong> {vaga.status}</p>
+                  <p><strong>Pontos:</strong> {vaga.vl_pontos}</p>
+                  <p><strong>Vagas:</strong> {vaga.qtd_vagas}</p>
+                </div>
 
                 {candidaturas.includes(vaga._id) ? (
                   <p className="vaga-candidatado">Você já se candidatou.</p>
@@ -138,3 +130,5 @@ const VagasPublicas = () => {
 };
 
 export default VagasPublicas;
+
+
