@@ -13,6 +13,8 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
     qtd_vagas: "",
     image: null,
   });
+
+  const [previewImage, setPreviewImage] = useState(null);
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,13 +30,18 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
         qtd_vagas: vagaParaEditar.qtd_vagas || "",
         image: null,
       });
+
+      // Usa a imagem existente como preview
+      setPreviewImage(vagaParaEditar.imageUrl || null);
     }
   }, [vagaParaEditar]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
-      setFormData({ ...formData, image: files[0] });
+      const file = files[0];
+      setFormData({ ...formData, image: file });
+      setPreviewImage(URL.createObjectURL(file));
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -83,118 +90,85 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
   };
 
   return (
-    <div className="form-vaga-overlay">
-      <div className="vaga-container">
-        <h2>{vagaParaEditar ? "Editar Vaga" : "Cadastrar Vaga"}</h2>
-        <form className="vaga-form" onSubmit={handleSubmit}>
-          <div className="form-content">
-            <div className="form-left">
-              <div className="image-upload">
-                {formData.image ? (
+    <div className="editvg-overlay">
+      <div className="editvg-container">
+        <h2 className="editvg-title">{vagaParaEditar ? "Editar Vaga" : "Cadastrar Vaga"}</h2>
+        <form className="editvg-form" onSubmit={handleSubmit}>
+          <div className="editvg-content">
+            <div className="editvg-left">
+              <div className="editvg-image-upload">
+                {previewImage ? (
                   <img
-                    src={URL.createObjectURL(formData.image)}
+                    src={previewImage}
                     alt="Preview"
-                    className="image-preview"
+                    className="editvg-image-preview"
                   />
                 ) : (
-                  <div className="placeholder-image">Imagem da vaga</div>
+                  <div className="editvg-placeholder">Imagem da vaga</div>
                 )}
-                <label htmlFor="image-upload" className="custom-file-upload">
-                  Selecionar imagem
-                </label>
-                <input
-                  id="image-upload"
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleChange}
-                  style={{ display: "none" }}
-                />
               </div>
+              <label htmlFor="editvg-image-input" className="editvg-upload-button">
+                Selecionar imagem
+              </label>
+              <input
+                id="editvg-image-input"
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+                hidden
+              />
             </div>
 
-            <div className="form-right">
-              <div className="form-group">
+            <div className="editvg-right">
+              <div className="editvg-group">
                 <label>Título da vaga</label>
-                <input
-                  name="titulodavaga"
-                  value={formData.titulodavaga}
-                  onChange={handleChange}
-                  required
-                />
+                <input name="titulodavaga" value={formData.titulodavaga} onChange={handleChange} required />
               </div>
-              <div className="form-group">
+              <div className="editvg-group">
                 <label>Descrição</label>
-                <textarea
-                  name="descricao"
-                  value={formData.descricao}
-                  onChange={handleChange}
-                  required
-                />
+                <textarea name="descricao" value={formData.descricao} onChange={handleChange} required />
               </div>
-              <div className="form-row">
-                <div className="form-group half">
+              <div className="editvg-row">
+                <div className="editvg-group half">
                   <label>Tipo</label>
-                  <input
-                    name="tipo_vaga"
-                    value={formData.tipo_vaga}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input name="tipo_vaga" value={formData.tipo_vaga} onChange={handleChange} required />
                 </div>
-                <div className="form-group half">
+                <div className="editvg-group half">
                   <label>Pontos</label>
-                  <input
-                    name="vl_pontos"
-                    type="number"
-                    value={formData.vl_pontos}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="number" name="vl_pontos" value={formData.vl_pontos} onChange={handleChange} required />
                 </div>
               </div>
-              <div className="form-row">
-                <div className="form-group half">
+              <div className="editvg-row">
+                <div className="editvg-group half">
                   <label>Hospital ID</label>
-                  <input
-                    name="id_hospital"
-                    value={formData.id_hospital}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input name="id_hospital" value={formData.id_hospital} onChange={handleChange} required />
                 </div>
-                <div className="form-group half">
+                <div className="editvg-group half">
                   <label>Quantidade de Vagas</label>
-                  <input
-                    name="qtd_vagas"
-                    type="number"
-                    value={formData.qtd_vagas}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="number" name="qtd_vagas" value={formData.qtd_vagas} onChange={handleChange} required />
                 </div>
               </div>
-              <div className="form-group">
+              <div className="editvg-group">
                 <label>Status</label>
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
+                <select name="status" value={formData.status} onChange={handleChange}>
                   <option value="ativa">Ativa</option>
                   <option value="inativa">Inativa</option>
                 </select>
               </div>
             </div>
           </div>
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "Salvando..." : "Salvar Vaga"}
-          </button>
+
+          <div className="editvg-actions">
+            <button type="submit" className="editvg-btn primary" disabled={loading}>
+              {loading ? "Salvando..." : "Salvar Vaga"}
+            </button>
+            <button type="button" className="editvg-btn secondary" onClick={onClose}>
+              Fechar
+            </button>
+          </div>
+          {mensagem && <p className="editvg-message">{mensagem}</p>}
         </form>
-        {mensagem && <p>{mensagem}</p>}
-        <button onClick={onClose} className="submit-btn" style={{ backgroundColor: "#aaa" }}>
-          Fechar
-        </button>
       </div>
     </div>
   );

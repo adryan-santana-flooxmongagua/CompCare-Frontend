@@ -13,7 +13,7 @@ const AdminSidebar = () => {
           <FaTachometerAlt className="icon" /> Página principal
         </li>
         <li onClick={() => navigate('/admin/usuarios')}>
-          <FaUsers className="icon" /> Gerenciar Voluntários
+          <FaUsers className="icon" /> Gerenciar Usuarios
         </li>
         <li onClick={() => navigate('/admin/criar-vaga')}>
           <FaPlus className="icon" /> Criar nova vaga

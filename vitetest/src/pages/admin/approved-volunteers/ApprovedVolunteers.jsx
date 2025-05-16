@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../aside/Aside";
 import { API_BASE_URL } from "../../../config/api";
-import "./ApprovedVolunteers.css"; 
+import "./ApprovedVolunteers.css";
 
 const CandidatosConfirmados = () => {
   const [candidatos, setCandidatos] = useState([]);
@@ -17,7 +17,7 @@ const CandidatosConfirmados = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         const text = await response.text();
         try {
           const data = JSON.parse(text);
@@ -36,7 +36,7 @@ const CandidatosConfirmados = () => {
         setLoading(false);
       }
     };
-  
+
     fetchCandidatos();
   }, [token]);
 
@@ -44,17 +44,17 @@ const CandidatosConfirmados = () => {
     <div className="dashboard-layout">
       <AdminSidebar />
       <main className="dashboard-content">
-        <div className="candidatos-container">
+        <div className="approved-container">
           <h2>Candidatos Confirmados</h2>
 
           {loading ? (
-            <p>Carregando candidatos...</p>
+            <p className="approved-loading">Carregando candidatos...</p>
           ) : erro ? (
-            <p className="error">{erro}</p>
+            <p className="approved-error">{erro}</p>
           ) : candidatos.length === 0 ? (
-            <p>Nenhum candidato confirmado.</p>
+            <p className="approved-empty">Nenhum candidato confirmado.</p>
           ) : (
-            <table className="candidatos-table">
+            <table className="approved-table">
               <thead>
                 <tr>
                   <th>Nome</th>

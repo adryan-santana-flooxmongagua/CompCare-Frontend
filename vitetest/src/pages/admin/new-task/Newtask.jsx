@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "../aside/Aside";
-import TaskModal from "../new-task/modal/TaskModal";
+import TaskModal from "./modal/TaskModal";
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
-import "./Newtask.css";
+import "./NewTask.css";
 
 const NewTask = () => {
   const [vagas, setVagas] = useState([]);
@@ -99,20 +99,24 @@ const NewTask = () => {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className="newtask-layout">
       <AdminSidebar />
-      <main className="dashboard-content">
-        <div className="vagas-grid">
+      <main className="newtask-content">
+        <div className="newtask-grid">
           {vagas.map((vaga) => (
-            <div key={vaga._id} className="vaga-card">
+            <div key={vaga._id} className="newtask-card">
               {vaga.imageUrl ? (
-                <img src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`} alt={vaga.titulodavaga} />
+                <img
+                  src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`}
+                  alt={vaga.titulodavaga}
+                  className="newtask-card-img"
+                />
               ) : (
-                <div className="vaga-no-image">Sem imagem</div>
+                <div className="newtask-no-image">Sem imagem</div>
               )}
               <h3>{vaga.titulodavaga}</h3>
-              <button className="ver-detalhes-btn" onClick={() => openModal(vaga)}>
-                Ver Detalhes
+              <button className="newtask-button" onClick={() => openModal(vaga)}>
+                Criar Tarefa
               </button>
             </div>
           ))}
@@ -138,5 +142,3 @@ const NewTask = () => {
 };
 
 export default NewTask;
-
-
