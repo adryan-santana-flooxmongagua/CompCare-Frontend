@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AdminSidebar from "../aside/Aside";
 import TaskModal from "./modal/TaskModal";
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
-import "./NewTask.css";
+import "./Newtask.css";
 
 const NewTask = () => {
   const [vagas, setVagas] = useState([]);
