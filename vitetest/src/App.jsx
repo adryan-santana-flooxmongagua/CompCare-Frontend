@@ -18,7 +18,7 @@ import ManageUsers from "./pages/admin/manage-users/ManageUsers";
 import ApproveVolunteers from "./pages/admin/aprove-vollunteer/ApproveVolunteers";
 import ApprovedVolunteers from "./pages/admin/approved-volunteers/ApprovedVolunteers";
 import VacancyStatus from "./pages/admin/vacancy-status/VacancyStatus";
-import NewTask from "./pages/admin/new-task/Newtask";
+import NewTask from "./pages/admin/new-task/NewTask";
 
 // Páginas de voluntário
 import ApplyVacancy from "./pages/volunteer/apply-vacancy/ApplyVacancy";
