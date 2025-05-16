@@ -8,7 +8,7 @@ const AprovarVoluntarios = () => {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [actionType, setActionType] = useState(""); // "aprovar" ou "recusar"
+  const [actionType, setActionType] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const token = localStorage.getItem("token");
 
@@ -76,17 +76,17 @@ const AprovarVoluntarios = () => {
     <div className="dashboard-layout">
       <AdminSidebar />
       <main className="dashboard-content">
-        <div className="usuarios-container">
+        <div className="aprov-container">
           <h2>Candidaturas Pendentes de Aprovação</h2>
 
           {loading ? (
             <p>Carregando candidaturas...</p>
           ) : erro ? (
-            <p className="error">{erro}</p>
+            <p className="aprov-error">{erro}</p>
           ) : candidaturas.length === 0 ? (
             <p>Nenhuma candidatura pendente.</p>
           ) : (
-            <table className="usuarios-table">
+            <table className="aprov-table">
               <thead>
                 <tr>
                   <th>Voluntário</th>
@@ -102,8 +102,18 @@ const AprovarVoluntarios = () => {
                     <td>{c.userId?.email || "N/A"}</td>
                     <td>{c.vagaId?.titulodavaga || "Vaga desconhecida"}</td>
                     <td>
-                      <button onClick={() => abrirModal(c._id, "aprovar")} className="aceitar-btn">Aprovar</button>
-                      <button onClick={() => abrirModal(c._id, "recusar")} className="recusar-btn">Recusar</button>
+                      <button
+                        onClick={() => abrirModal(c._id, "aprovar")}
+                        className="aprov-btn aprov-aceitar"
+                      >
+                        Aprovar
+                      </button>
+                      <button
+                        onClick={() => abrirModal(c._id, "recusar")}
+                        className="aprov-btn aprov-recusar"
+                      >
+                        Recusar
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -111,15 +121,20 @@ const AprovarVoluntarios = () => {
             </table>
           )}
 
-          {/* Modal de Confirmação */}
           {modalVisible && (
-            <div className="modal-overlay">
-              <div className="modal-content">
+            <div className="aprov-modal-overlay">
+              <div className="aprov-modal-content">
                 <h3>Confirmar Ação</h3>
-                <p>Tem certeza que deseja <strong>{actionType}</strong> esta candidatura?</p>
-                <div className="modal-buttons">
-                  <button onClick={confirmarAcao} className="confirmar-btn">Confirmar</button>
-                  <button onClick={fecharModal} className="cancelar-btn">Cancelar</button>
+                <p>
+                  Tem certeza que deseja <strong>{actionType}</strong> esta candidatura?
+                </p>
+                <div className="aprov-modal-buttons">
+                  <button onClick={confirmarAcao} className="aprov-btn aprov-confirmar">
+                    Confirmar
+                  </button>
+                  <button onClick={fecharModal} className="aprov-btn aprov-cancelar">
+                    Cancelar
+                  </button>
                 </div>
               </div>
             </div>
@@ -131,3 +146,5 @@ const AprovarVoluntarios = () => {
 };
 
 export default AprovarVoluntarios;
+
+
