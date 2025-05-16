@@ -1,25 +1,24 @@
 .vagas-container {
-  background-color: #a2b7e8;
+  background-color: #111827;
   padding: 40px 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
+  color: #e5e7eb;
 }
 
 .vagas-title {
   text-align: center;
-  font-size: 2.4rem;
+  font-size: 2.5rem;
   margin-bottom: 40px;
-  color: #fff;
+  color: #f9fafb;
   font-weight: 700;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
 .vagas-empty,
 .vagas-loading {
   text-align: center;
-  color: #eee;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  color: #9ca3af;
   margin-top: 40px;
 }
 
@@ -27,115 +26,87 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
-  padding-bottom: 20px;
 }
 
 .vaga-card {
-  background-color: #fff;
-  border-left: 5px solid #5856e8;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(88, 86, 232, 0.15);
-  display: flex;
-  flex-direction: column;
+  background-color: #1f2937;
+  border-radius: 12px;
   overflow: hidden;
-  min-height: 480px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .vaga-card:hover {
-  box-shadow: 0 12px 30px rgba(88, 86, 232, 0.3);
-  transform: translateY(-6px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 }
 
 .vaga-image {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  transition: transform 0.4s ease;
-  cursor: pointer;
-}
-
-.vaga-image:hover {
-  transform: scale(1.05);
 }
 
 .vaga-info {
-  padding: 20px 24px;
-  flex-grow: 1;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .vaga-title {
-  font-size: 1.5rem;
-  margin: 0 0 16px;
-  color: #3f3d94;
-  font-weight: 700;
-  line-height: 1.3;
-  min-height: 52px;
-  text-align: left;
+  font-size: 1.4rem;
+  color: #facc15;
+  margin-bottom: 10px;
 }
 
 .vaga-desc {
   font-size: 1rem;
-  color: #555555;
-  margin-bottom: 18px;
-  line-height: 1.5;
+  color: #d1d5db;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  text-align: justify;
   overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
-  text-align: justify;
-}
-
-.vaga-info-adicional {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
 }
 
 .vaga-info-adicional p {
   font-size: 0.95rem;
-  color: #444444;
-  margin: 0;
-  font-weight: 600;
-  line-height: 1.2;
+  color: #9ca3af;
+  margin: 4px 0;
 }
 
 .vaga-info-adicional p strong {
-  font-weight: 700;
-  color: #5856e8;
+  color: #4f46e5;
 }
 
 .vaga-candidatado {
-  color: #3a8d4e;
-  font-weight: 700;
-  margin-top: 12px;
-  font-size: 1rem;
+  margin-top: 16px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #34d399;
   text-align: center;
 }
 
 .vaga-btn {
-  background-color: #5856e8;
-  color: #fff;
+  margin-top: 16px;
+  background-color: #4f46e5;
+  color: white;
+  padding: 10px 16px;
+  font-weight: 600;
   border: none;
-  padding: 12px;
-  margin-top: 18px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1rem;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 12px rgba(88, 86, 232, 0.4);
-  user-select: none;
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.4);
 }
 
 .vaga-btn:hover {
-  background-color: #4342b8;
-  box-shadow: 0 6px 20px rgba(67, 66, 184, 0.6);
+  background-color: #4338ca;
+  box-shadow: 0 6px 16px rgba(67, 56, 202, 0.5);
 }
 
 @media (max-width: 400px) {
@@ -143,4 +114,3 @@
     -webkit-line-clamp: 4;
   }
 }
-

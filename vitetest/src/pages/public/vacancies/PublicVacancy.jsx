@@ -130,5 +130,3 @@ const VagasPublicas = () => {
 };
 
 export default VagasPublicas;
-
-
