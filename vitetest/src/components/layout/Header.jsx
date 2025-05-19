@@ -63,6 +63,7 @@ const Header = () => {
                     <>
                       <Link to="/meus-pontos" className="dropdown-link">Meus Pontos</Link>
                       <Link to="/voluntario/minhas-candidaturas" className="dropdown-link">Minhas Vagas</Link>
+                      <Link to="/voluntario/Mytask" className="dropdown-link">Tarefas</Link>
                     </>
                   )}
                   <button

@@ -1,16 +1,116 @@
-.my-tasks-container {
-    padding: 2rem;
-  }
-  
-  .task-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .task-item {
-    background: #f2f2f2;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-  }
-  
+.mytask-container {
+  padding: 2rem;
+  background-color: #1f1f2e;
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mytask-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+.mytask-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mytask-card {
+  background-color: #f5f6fa;
+  color: #333;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.mytask-card:hover {
+  transform: translateY(-3px);
+}
+
+.mytask-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.mytask-card-header button {
+  background-color: #3a4ef4;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mytask-card-header button:hover {
+  background-color: #2c3ed7;
+}
+
+.mytask-card-body {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #ddd;
+}
+
+.mytask-task-item {
+  margin-bottom: 1rem;
+}
+
+.mytask-task-item p {
+  margin: 0.25rem 0;
+}
+
+.mytask-conclude-btn {
+  background-color: #00c851;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.mytask-conclude-btn:hover {
+  background-color: #009245;
+}
+
+.mytask-status {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.mytask-status.pendente {
+  background-color: #ffe58f;
+  color: #ad6800;
+}
+
+.mytask-status.concluida {
+  background-color: #b7eb8f;
+  color: #237804;
+}
+
+.mytask-conclude-btn {
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mytask-conclude-btn:hover {
+  background-color: #40a9ff;
+}
