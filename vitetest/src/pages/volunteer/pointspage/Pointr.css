@@ -1,0 +1,35 @@
+.pontuacao-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pontuacao-card {
+  background: #1f1f1f;
+  color: #fff;
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.icone-trofeu {
+  font-size: 50px;
+  margin-bottom: 15px;
+}
+
+.titulo {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.pontuacao {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffd700;
+}
