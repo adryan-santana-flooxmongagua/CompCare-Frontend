@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 import AdminSidebar from "../aside/Aside";
 import { API_BASE_URL } from "../../../config/api";
+import imf from "../../../assets/imgs/famyly.png";
 import "./CreateVacancy.css";
+
+const imagensPorTipo = {
+  "cuidados com idosos": imf,
+  "cuidados com jovens": "",
+  "comunicação": "",
+  "administração": "",
+  "educação": "",
+  "limpeza": "",
+  "alimentação": "",
+};
 
 const CriarVaga = () => {
   const [formData, setFormData] = useState({
@@ -12,18 +23,27 @@ const CriarVaga = () => {
     id_hospital: "",
     status: "ativa",
     qtd_vagas: "",
-    image: null,
+    image: null, // Agora será uma string com o caminho da imagem
   });
 
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "image" ? files[0] : value,
-    }));
+    const { name, value } = e.target;
+
+    if (name === "tipo_vaga") {
+      setFormData((prev) => ({
+        ...prev,
+        tipo_vaga: value,
+        image: imagensPorTipo[value] || null,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -37,18 +57,16 @@ const CriarVaga = () => {
       return;
     }
 
-    const data = new FormData();
-    Object.entries({ ...formData, id_admin }).forEach(
-      ([key, val]) => val && data.append(key, val)
-    );
+    const payload = { ...formData, id_admin };
 
     try {
       const response = await fetch(`${API_BASE_URL}/vagas/vagas`, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: data,
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -86,24 +104,13 @@ const CriarVaga = () => {
               <div className="image-box">
                 {formData.image ? (
                   <img
-                    src={URL.createObjectURL(formData.image)}
-                    alt="Preview"
+                    src={formData.image}
+                    alt="Imagem da Vaga"
                     className="preview-img"
                   />
                 ) : (
-                  <div className="placeholder-image">Pré-visualização</div>
+                  <div className="placeholder-image">Imagem da Vaga</div>
                 )}
-                <label htmlFor="fileUpload" className="file-upload-label">
-                  Upload da Imagem
-                </label>
-                <input
-                  id="fileUpload"
-                  type="file"
-                  name="image"
-                  onChange={handleChange}
-                  accept="image/*"
-                  hidden
-                />
               </div>
 
               <div className="input-fields">
@@ -137,8 +144,8 @@ const CriarVaga = () => {
                       required
                     >
                       <option value="">Selecione</option>
-                      <option value="cuidados com idosos">Idosos</option>
-                      <option value="cuidados com jovens">Jovens</option>
+                      <option value="cuidados com idosos">cuidados com idosos</option>
+                      <option value="cuidados com jovens">cuidados com jovens</option>
                       <option value="comunicação">Comunicação</option>
                       <option value="administração">Administração</option>
                       <option value="educação">Educação</option>
@@ -210,4 +217,3 @@ const CriarVaga = () => {
 };
 
 export default CriarVaga;
-
