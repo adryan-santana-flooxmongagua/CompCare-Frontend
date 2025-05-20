@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { API_BASE_URL } from "../../../../config/api";
+import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../../config/api";
+import { getImagemPorTipo } from "../../../../utils/imagemPorTipo";
 import "./VacancyForm.css";
 
 const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
@@ -14,12 +15,12 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
     image: null,
   });
 
-  const [previewImage, setPreviewImage] = useState(null);
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (vagaParaEditar) {
+      const imagePath = getImagemPorTipo(vagaParaEditar.tipo_vaga);
       setFormData({
         titulodavaga: vagaParaEditar.titulodavaga || "",
         descricao: vagaParaEditar.descricao || "",
@@ -28,22 +29,26 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
         id_hospital: vagaParaEditar.id_hospital || "",
         status: vagaParaEditar.status || "ativa",
         qtd_vagas: vagaParaEditar.qtd_vagas || "",
-        image: null,
+        image: imagePath ? `${API_BASE_IMAGE_URL}${imagePath}` : null,
       });
-
-      // Usa a imagem existente como preview
-      setPreviewImage(vagaParaEditar.imageUrl || null);
     }
   }, [vagaParaEditar]);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "image") {
-      const file = files[0];
-      setFormData({ ...formData, image: file });
-      setPreviewImage(URL.createObjectURL(file));
+    const { name, value } = e.target;
+
+    if (name === "tipo_vaga") {
+      const imagePath = getImagemPorTipo(value);
+      setFormData((prev) => ({
+        ...prev,
+        tipo_vaga: value,
+        image: imagePath ? `${API_BASE_IMAGE_URL}${imagePath}` : null,
+      }));
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
@@ -51,13 +56,14 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
     e.preventDefault();
     setLoading(true);
     const id_admin = localStorage.getItem("userId");
-    const data = new FormData();
 
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value) data.append(key, value);
-    });
+    if (!id_admin) {
+      setMensagem("Erro: ID do administrador não encontrado.");
+      setLoading(false);
+      return;
+    }
 
-    data.append("id_admin", id_admin);
+    const payload = { ...formData, id_admin };
 
     const endpoint = vagaParaEditar
       ? `${API_BASE_URL}/vagas/vagas/${vagaParaEditar._id}`
@@ -67,9 +73,10 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
       const response = await fetch(endpoint, {
         method: vagaParaEditar ? "PUT" : "POST",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: data,
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -97,9 +104,9 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
           <div className="editvg-content">
             <div className="editvg-left">
               <div className="editvg-image-upload">
-                {previewImage ? (
+                {formData.image ? (
                   <img
-                    src={previewImage}
+                    src={formData.image}
                     alt="Preview"
                     className="editvg-image-preview"
                   />
@@ -107,17 +114,6 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
                   <div className="editvg-placeholder">Imagem da vaga</div>
                 )}
               </div>
-              <label htmlFor="editvg-image-input" className="editvg-upload-button">
-                Selecionar imagem
-              </label>
-              <input
-                id="editvg-image-input"
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleChange}
-                hidden
-              />
             </div>
 
             <div className="editvg-right">
@@ -132,7 +128,16 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
               <div className="editvg-row">
                 <div className="editvg-group half">
                   <label>Tipo</label>
-                  <input name="tipo_vaga" value={formData.tipo_vaga} onChange={handleChange} required />
+                  <select name="tipo_vaga" value={formData.tipo_vaga} onChange={handleChange} required>
+                    <option value="">Selecione</option>
+                    <option value="cuidados com idosos">Cuidados com Idosos</option>
+                    <option value="cuidados com jovens">Cuidados com Jovens</option>
+                    <option value="comunicação">Comunicação</option>
+                    <option value="administração">Administração</option>
+                    <option value="educação">Educação</option>
+                    <option value="limpeza">Limpeza</option>
+                    <option value="alimentação">Alimentação</option>
+                  </select>
                 </div>
                 <div className="editvg-group half">
                   <label>Pontos</label>
@@ -141,7 +146,7 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
               </div>
               <div className="editvg-row">
                 <div className="editvg-group half">
-                  <label>Hospital ID</label>
+                  <label>ID do Hospital</label>
                   <input name="id_hospital" value={formData.id_hospital} onChange={handleChange} required />
                 </div>
                 <div className="editvg-group half">
@@ -153,7 +158,8 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
                 <label>Status</label>
                 <select name="status" value={formData.status} onChange={handleChange}>
                   <option value="ativa">Ativa</option>
-                  <option value="inativa">Inativa</option>
+                  <option value="pendente">Pendente</option>
+                  <option value="finalizado">Finalizado</option>
                 </select>
               </div>
             </div>
