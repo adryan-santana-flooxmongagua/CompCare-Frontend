@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import AdminSidebar from "../aside/Aside";
 import { API_BASE_URL } from "../../../config/api";
-import imf from "../../../assets/imgs/famyly.png";
+import imf from "../../../assets/imgs/idosos.png";
+import edu from "../../../assets/imgs/education.png";
+import cleaning from "../../../assets/imgs/cleaning.png";
+import food from "../../../assets/imgs/food.png";
+import kid from "../../../assets/imgs/kid.png";
+import conv from "../../../assets/imgs/conv.png";
+import admin from "../../../assets/imgs/admin.png";
 import "./CreateVacancy.css";
 
 const imagensPorTipo = {
   "cuidados com idosos": imf,
-  "cuidados com jovens": "",
-  "comunicação": "",
-  "administração": "",
-  "educação": "",
-  "limpeza": "",
-  "alimentação": "",
+  "cuidados com jovens": kid,
+  "comunicação": conv,
+  "administração": admin,
+  "educação": edu,
+  "limpeza": cleaning,
+  "alimentação": food,
 };
 
 const CriarVaga = () => {
