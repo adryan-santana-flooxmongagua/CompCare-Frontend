@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../aside/Aside";
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { getImagemPorTipo } from "../../../utils/imagemPorTipo"; 
 import FormVaga from "./forms/VacancyForm";
 import "./VacancyStatus.css";
 
@@ -41,9 +42,7 @@ const StatusVaga = () => {
     try {
       const response = await fetch(
         `${API_BASE_URL}/vagas/vagas/${vagaParaExcluir}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
 
       if (!response.ok) {
@@ -79,16 +78,12 @@ const StatusVaga = () => {
     <div className="dashboard-layout">
       <AdminSidebar />
 
-      {/* Modal de Confirmação */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Deseja realmente excluir esta vaga?</h3>
             <div className="modal-buttons">
-              <button
-                className="btn-cancel"
-                onClick={() => setShowModal(false)}
-              >
+              <button className="btn-cancel" onClick={() => setShowModal(false)}>
                 Cancelar
               </button>
               <button className="btn-confirm" onClick={confirmarExclusao}>
@@ -119,45 +114,51 @@ const StatusVaga = () => {
               <p>Não há vagas disponíveis.</p>
             ) : (
               <div className="vagas-list">
-                {vagas.map((vaga) => (
-                  <div key={vaga._id} className="vaga-card">
-                    {vaga.imageUrl ? (
-                      <img
-                        src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`}
-                        alt={vaga.titulodavaga}
-                        className="vaga-image"
-                      />
-                    ) : (
-                      <div className="vaga-no-image">Sem imagem</div>
-                    )}
-                    <div className="vaga-info">
-                      <h3 className="vaga-title">{vaga.titulodavaga}</h3>
-                      <p className="vaga-type">Tipo: {vaga.tipo_vaga}</p>
-                      <p className="vaga-status">Status: {vaga.status}</p>
-                      <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
-                      <p className="vaga-quantity">
-                        Qtd. Vagas: {vaga.qtd_vagas}
-                      </p>
-                      <p className="vaga-candidatos">
-                        Voluntários Alistados: {vaga.candidatos?.length || 0}
-                      </p>
-                      <div className="vaga-actions">
-                        <button
-                          onClick={() => handleEdit(vaga._id)}
-                          className="edit-btn"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(vaga._id)}
-                          className="delete-btn"
-                        >
-                          Excluir
-                        </button>
+                {vagas.map((vaga) => {
+                  const imagem = vaga.imageUrl
+                    ? `${API_BASE_IMAGE_URL}${vaga.imageUrl}`
+                    : getImagemPorTipo(vaga.tipo_vaga)
+                    ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
+                    : null;
+
+                  return (
+                    <div key={vaga._id} className="vaga-card">
+                      {imagem ? (
+                        <img
+                          src={imagem}
+                          alt={vaga.titulodavaga}
+                          className="vaga-image"
+                        />
+                      ) : (
+                        <div className="vaga-no-image">Sem imagem</div>
+                      )}
+                      <div className="vaga-info">
+                        <h3 className="vaga-title">{vaga.titulodavaga}</h3>
+                        <p className="vaga-type">Tipo: {vaga.tipo_vaga}</p>
+                        <p className="vaga-status">Status: {vaga.status}</p>
+                        <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
+                        <p className="vaga-quantity">Qtd. Vagas: {vaga.qtd_vagas}</p>
+                        <p className="vaga-candidatos">
+                          Voluntários Alistados: {vaga.candidatos?.length || 0}
+                        </p>
+                        <div className="vaga-actions">
+                          <button
+                            onClick={() => handleEdit(vaga._id)}
+                            className="edit-btn"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(vaga._id)}
+                            className="delete-btn"
+                          >
+                            Excluir
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
