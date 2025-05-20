@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { getImagemPorTipo } from "../../../utils/imagemPorTipo";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './PublicVacancy.css';
@@ -92,13 +93,24 @@ const VagasPublicas = () => {
         <div className="vagas-list">
           {vagas.map(vaga => (
             <div key={vaga._id} className="vaga-card">
-              {vaga.imageUrl && (
-                <img
-                  src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`}
-                  alt={vaga.titulodavaga}
-                  className="vaga-image"
-                />
-              )}
+              {(() => {
+                const imagem = vaga.imageUrl
+                  ? `${API_BASE_IMAGE_URL}${vaga.imageUrl}`
+                  : getImagemPorTipo(vaga.tipo_vaga)
+                  ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
+                  : null;
+
+                return imagem ? (
+                  <img
+                    src={imagem}
+                    alt={vaga.titulodavaga}
+                    className="vaga-image"
+                  />
+                ) : (
+                  <div className="vaga-no-image">Sem imagem</div>
+                );
+              })()}
+
               <div className="vaga-info">
                 <h3 className="vaga-title">{vaga.titulodavaga}</h3>
                 <p className="vaga-desc">{vaga.descricao}</p>

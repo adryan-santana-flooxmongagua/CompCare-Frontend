@@ -43,9 +43,12 @@
 
 .vaga-image {
   width: 100%;
-  height: 180px;
+  max-height: 180px;
   object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
 }
+
 
 .vaga-info {
   padding: 20px;
