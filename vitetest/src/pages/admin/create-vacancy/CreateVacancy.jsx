@@ -1,24 +1,8 @@
 import React, { useState } from "react";
 import AdminSidebar from "../aside/Aside";
-import { API_BASE_URL } from "../../../config/api";
-import imf from "../../../assets/imgs/idosos.png";
-import edu from "../../../assets/imgs/education.png";
-import cleaning from "../../../assets/imgs/cleaning.png";
-import food from "../../../assets/imgs/food.png";
-import kid from "../../../assets/imgs/kid.png";
-import conv from "../../../assets/imgs/conv.png";
-import admin from "../../../assets/imgs/admin.png";
+import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { getImagemPorTipo } from "../../../utils/imagemPorTipo";
 import "./CreateVacancy.css";
-
-const imagensPorTipo = {
-  "cuidados com idosos": imf,
-  "cuidados com jovens": kid,
-  "comunicação": conv,
-  "administração": admin,
-  "educação": edu,
-  "limpeza": cleaning,
-  "alimentação": food,
-};
 
 const CriarVaga = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +13,7 @@ const CriarVaga = () => {
     id_hospital: "",
     status: "ativa",
     qtd_vagas: "",
-    image: null, // Agora será uma string com o caminho da imagem
+    image: null,
   });
 
   const [mensagem, setMensagem] = useState("");
@@ -39,10 +23,11 @@ const CriarVaga = () => {
     const { name, value } = e.target;
 
     if (name === "tipo_vaga") {
+      const imagePath = getImagemPorTipo(value);
       setFormData((prev) => ({
         ...prev,
         tipo_vaga: value,
-        image: imagensPorTipo[value] || null,
+        image: imagePath ? `${API_BASE_IMAGE_URL}${imagePath}` : null,
       }));
     } else {
       setFormData((prev) => ({

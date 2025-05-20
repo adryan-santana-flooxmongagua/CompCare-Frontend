@@ -1,5 +1,6 @@
 import React from "react";
 import { API_BASE_IMAGE_URL } from "../../../../config/api";
+import { getImagemPorTipo } from "../../../../utils/imagemPorTipo";
 import "./TaskModal.css";
 
 const TaskModal = ({
@@ -18,13 +19,19 @@ const TaskModal = ({
 }) => {
   if (!isOpen || !vaga) return null;
 
+  // Obtem imagem da vaga
+  const imagemRelativa = vaga.imageUrl
+    ? `${API_BASE_IMAGE_URL}${vaga.imageUrl}`
+    : getImagemPorTipo(vaga.tipo_vaga)
+    ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
+    : null;
+
   return (
     <div className="newtaskmodal-overlay" onClick={onClose}>
       <div
         className="newtaskmodal-content"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Botão de Fechar */}
         <button className="newtaskmodal-close-button" onClick={onClose}>
           &times;
         </button>
@@ -32,12 +39,14 @@ const TaskModal = ({
         <div className="newtaskmodal-grid">
           <div className="newtaskmodal-description">
             <div className="newtaskmodal-image">
-              {vaga.imageUrl && (
+              {imagemRelativa ? (
                 <img
-                  src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`}
+                  src={imagemRelativa}
                   alt="Imagem da vaga"
                   className="newtaskmodal-vaga-imagem"
                 />
+              ) : (
+                <div className="newtask-no-image">Sem imagem</div>
               )}
             </div>
 

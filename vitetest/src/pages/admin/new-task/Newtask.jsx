@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AdminSidebar from "../aside/Aside";
 import TaskModal from "./modal/TaskModal";
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { getImagemPorTipo } from "../../../utils/imagemPorTipo";
 import "./Newtask.css";
 
 const NewTask = () => {
@@ -103,23 +104,26 @@ const NewTask = () => {
       <AdminSidebar />
       <main className="newtask-content">
         <div className="newtask-grid">
-          {vagas.map((vaga) => (
-            <div key={vaga._id} className="newtask-card">
-              {vaga.imageUrl ? (
-                <img
-                  src={`${API_BASE_IMAGE_URL}${vaga.imageUrl}`}
-                  alt={vaga.titulodavaga}
-                  className="newtask-card-img"
-                />
-              ) : (
-                <div className="newtask-no-image">Sem imagem</div>
-              )}
-              <h3>{vaga.titulodavaga}</h3>
-              <button className="newtask-button" onClick={() => openModal(vaga)}>
-                Criar Tarefa
-              </button>
-            </div>
-          ))}
+          {vagas.map((vaga) => {
+            const imagemRelativa = getImagemPorTipo(vaga.tipo_vaga);
+            return (
+              <div key={vaga._id} className="newtask-card">
+                {imagemRelativa ? (
+                  <img
+                    src={`${API_BASE_IMAGE_URL}${imagemRelativa}`}
+                    alt={vaga.titulodavaga}
+                    className="newtask-card-img"
+                  />
+                ) : (
+                  <div className="newtask-no-image">Sem imagem</div>
+                )}
+                <h3>{vaga.titulodavaga}</h3>
+                <button className="newtask-button" onClick={() => openModal(vaga)}>
+                  Criar Tarefa
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {isModalOpen && vagaSelecionada && (
