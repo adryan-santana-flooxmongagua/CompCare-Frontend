@@ -170,7 +170,7 @@ const FormVaga = ({ vagaParaEditar, onClose, onSave }) => {
               {loading ? "Salvando..." : "Salvar Vaga"}
             </button>
             <button type="button" className="editvg-btn secondary" onClick={onClose}>
-              Fechar
+              Cancelar
             </button>
           </div>
           {mensagem && <p className="editvg-message">{mensagem}</p>}
