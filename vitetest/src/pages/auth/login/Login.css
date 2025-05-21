@@ -1,73 +1,187 @@
+/* Remover rolagem e centralizar */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 
+  font-family: Arial, sans-serif;
+}
 
-.login-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
-  
-  .login-title {
-    margin-bottom: 30px;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .login-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .login-input-group {
-    margin-bottom: 15px;
-    text-align: left;
-  }
-  
-  .login-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .login-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-  }
-  
-  .login-error {
-    color: red;
-    margin-bottom: 10px;
-  }
-  
-  .login-link-container {
-    text-align: right;
-    margin: 10px 0;
-  }
-  
-  .login-link {
-    color: #5865f2;
-    font-size: 14px;
-    text-decoration: none;
-  }
-  
-  .login-button {
-    background-color: #5865f2;
-    color: white;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .login-footer {
-    margin-top: 20px;
-    font-size: 14px;
-  }
-  
-  
+.logg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f9fafb;
+  padding: 2rem;
+  box-sizing: border-box;
+
+}
+
+.logg-box {
+  display: flex;
+  width: 1100px;
+  max-width: 95%;
+  background-color: white;
+  border-radius: 1rem;
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.logg-left-panel {
+  width: 45%;
+  background: linear-gradient(to bottom right, #93c5fd, #60a5fa);
+  color: #1e3a8a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logg-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.logg-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #1e40af;
+}
+
+.logg-switch-button {
+  background: none;
+  border: 2px solid #1e40af;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: #1e40af;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logg-switch-button:hover {
+  background-color: #1e40af;
+  color: white;
+}
+
+.logg-right-panel {
+  width: 55%;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logg-form-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #3b82f6;
+  margin-bottom: 1.5rem;
+}
+
+.logg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.logg-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.logg-input {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.logg-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+}
+
+.logg-error {
+  color: red;
+  font-size: 0.9rem;
+}
+
+.logg-link-row {
+  text-align: right;
+}
+
+.logg-link {
+  font-size: 0.9rem;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.logg-link:hover {
+  text-decoration: underline;
+}
+
+.logg-submit-button {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logg-submit-button:hover {
+  background-color: #2563eb;
+}
+
+.logg-footer {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.logg-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.logg-link {
+  font-size: 0.9rem;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.logg-link:hover,
+.logg-link:focus {
+  text-decoration: underline;
+  color: #2563eb;
+}
+
+.logg-link:focus,
+.reg-link:focus {
+  outline: none;
+  color: #2563eb;
+}
+
+.logg-link:active,
+.reg-link:active {
+  color: #1d4ed8;
+}
+
+.reg-box,
+.logg-box {
+  min-height: 600px;
+}
