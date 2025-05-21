@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <main>
       {/* Hero */}
-      <section className="home-hero-container">
+      <section className="home-hero-container section-full">
         <div className="home-hero-text">
           <h1>Conectando <span className="home-highlight">corações</span> aos <span className="home-highlight">hospitais</span></h1>
           <p>Voluntarie-se e transforme vidas com a CompCare</p>
@@ -21,9 +21,9 @@ const Home = () => {
       </section>
 
       {/* Benefícios */}
-      <section className="home-benefits">
+      <section className="home-benefits section-full">
         <h2>Por que ser voluntário pela CompCare?</h2>
-        <div className="home-benefits-list">
+        <div className="home-benefits-list vertical">
           <div className="home-benefit">
             <i className="fa-solid fa-heart-pulse"></i>
             <p>Ajude hospitais com real necessidade</p>
@@ -40,7 +40,7 @@ const Home = () => {
       </section>
 
       {/* Chamada para ação */}
-      <section className="home-cta">
+      <section className="home-cta section-full">
         <h2>Quer fazer parte dessa mudança?</h2>
         <p>Junte-se à CompCare e ajude a construir um futuro mais humano e solidário para todos.</p>
         <a href="/vagas" className="home-cta-button">Quero ajudar agora</a>
@@ -50,3 +50,4 @@ const Home = () => {
 };
 
 export default Home;
+
