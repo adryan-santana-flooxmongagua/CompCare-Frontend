@@ -10,7 +10,6 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Roda sempre que a rota mudar
   useEffect(() => {
     const token = localStorage.getItem('token');
     const storedRole = localStorage.getItem('role');
@@ -29,46 +28,46 @@ const Header = () => {
   };
 
   return (
-    <header className="header">
-      <div className="container">
-        <h1 className="logo">CompCare</h1>
-        <nav className="nav">
-          <Link to="/" className="nav-link">Home</Link>
-          <Link to="/vagas" className="nav-link">Vagas</Link>
-          <Link to="/leaderboard" className="nav-link">Ranking</Link>
+    <header className="hhed-header">
+      <div className="hhed-container">
+        <h1 className="hhed-logo">CompCare</h1>
+        <nav className="hhed-nav">
+          <Link to="/" className="hhed-nav-link">Home</Link>
+          <Link to="/vagas" className="hhed-nav-link">Vagas</Link>
+          <Link to="/leaderboard" className="hhed-nav-link">Ranking</Link>
 
           {!isAuthenticated ? (
             <>
-              <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register" className="nav-link">Registrar</Link>
+              <Link to="/login" className="hhed-nav-link">Login</Link>
+              <Link to="/register" className="hhed-nav-link">Registrar</Link>
             </>
           ) : (
-            <div className="menu-wrapper">
+            <div className="hhed-menu-wrapper">
               <button
-                className="menu-button"
+                className="hhed-menu-button"
                 onClick={() => setMenuOpen(o => !o)}
               >
                 ☰
               </button>
               {menuOpen && (
-                <div className="dropdown-menu">
+                <div className="hhed-dropdown-menu">
                   {role === 'admin' && (
                     <>
-                      <Link to="/admin/dashboard" className="dropdown-link">Dashboard</Link>
-                      <Link to="/admin/criar-vaga" className="dropdown-link">Criar Vaga</Link>
-                      <Link to="/admin/usuarios" className="dropdown-link">Usuários</Link>
+                      <Link to="/admin/dashboard" className="hhed-dropdown-link">Dashboard</Link>
+                      <Link to="/admin/criar-vaga" className="hhed-dropdown-link">Criar Vaga</Link>
+                      <Link to="/admin/usuarios" className="hhed-dropdown-link">Usuários</Link>
                     </>
                   )}
                   {role === 'volunteer' && (
                     <>
-                      <Link to="/meus-pontos" className="dropdown-link">Meus Pontos</Link>
-                      <Link to="/voluntario/minhas-candidaturas" className="dropdown-link">Minhas Vagas</Link>
-                      <Link to="/voluntario/Mytask" className="dropdown-link">Tarefas</Link>
+                      <Link to="/meus-pontos" className="hhed-dropdown-link">Meus Pontos</Link>
+                      <Link to="/voluntario/minhas-candidaturas" className="hhed-dropdown-link">Minhas Vagas</Link>
+                      <Link to="/voluntario/Mytask" className="hhed-dropdown-link">Tarefas</Link>
                     </>
                   )}
                   <button
                     onClick={handleLogout}
-                    className="dropdown-link logout"
+                    className="hhed-dropdown-link hhed-logout"
                   >
                     Sair
                   </button>
