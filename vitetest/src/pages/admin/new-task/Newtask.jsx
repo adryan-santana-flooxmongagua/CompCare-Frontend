@@ -19,7 +19,7 @@ const NewTask = () => {
 
   const fetchVagas = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/vagas/vagas`);
+      const res = await fetch(`${API_BASE_URL}/vagas/com-confirmados`);
       const data = await res.json();
       setVagas(data);
     } catch (error) {
@@ -69,7 +69,9 @@ const NewTask = () => {
       setDescricao("");
       setFrequencia("diaria");
 
-      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`);
+      const atualizadas = await fetch(
+        `${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`
+      );
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
@@ -90,7 +92,9 @@ const NewTask = () => {
 
       if (!res.ok) throw new Error("Erro ao excluir tarefa");
 
-      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`);
+      const atualizadas = await fetch(
+        `${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`
+      );
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
@@ -118,7 +122,10 @@ const NewTask = () => {
                   <div className="newtask-no-image">Sem imagem</div>
                 )}
                 <h3>{vaga.titulodavaga}</h3>
-                <button className="newtask-button" onClick={() => openModal(vaga)}>
+                <button
+                  className="newtask-button"
+                  onClick={() => openModal(vaga)}
+                >
                   Criar Tarefa
                 </button>
               </div>
