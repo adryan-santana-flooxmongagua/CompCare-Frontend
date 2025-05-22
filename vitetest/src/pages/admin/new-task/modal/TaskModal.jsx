@@ -1,5 +1,5 @@
-import React from "react";
-import { API_BASE_URL,API_BASE_IMAGE_URL } from "../../../../config/api";
+import React, { useState } from "react";
+import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../../config/api";
 import { getImagemPorTipo } from "../../../../utils/imagemPorTipo";
 import "./TaskModal.css";
 
@@ -16,81 +16,88 @@ const TaskModal = ({
   tarefas,
   setTarefas,
   onSubmit,
-  token, // opcional: caso você use autenticação
+  token,
 }) => {
+  const [tarefaParaExcluir, setTarefaParaExcluir] = useState(null);
+
   if (!isOpen || !vaga) return null;
 
+  const imagemPadrao = getImagemPorTipo(vaga.tipo_vaga);
   const imagemRelativa = vaga.imageUrl
-    ? `${API_BASE_IMAGE_URL}${vaga.imageUrl}`
-    : getImagemPorTipo(vaga.tipo_vaga)
-    ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
+    ? vaga.imageUrl.startsWith("http")
+      ? vaga.imageUrl
+      : `${API_BASE_IMAGE_URL}${vaga.imageUrl}`
+    : imagemPadrao
+    ? `${API_BASE_IMAGE_URL}${imagemPadrao}`
     : null;
 
- const onDelete = async (id) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      },
-    });
+  const confirmarExclusao = (id) => setTarefaParaExcluir(id);
+  const cancelarExclusao = () => setTarefaParaExcluir(null);
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erro ao excluir tarefa");
+  const excluirTarefa = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/tasks/${tarefaParaExcluir}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao excluir tarefa");
+      }
+
+      setTarefas((prev) => prev.filter((tarefa) => tarefa._id !== tarefaParaExcluir));
+      setTarefaParaExcluir(null);
+    } catch (error) {
+      console.error("Erro ao excluir tarefa:", error);
+      alert(`Erro: ${error.message}`);
     }
-
-    setTarefas((prev) => prev.filter((tarefa) => tarefa._id !== id));
-  } catch (error) {
-    console.error("Erro ao excluir tarefa:", error);
-    alert(`Erro: ${error.message}`);
-  }
-};
-
+  };
 
   return (
-    <div className="taskmodal-overlay" onClick={onClose}>
-      <div className="taskmodal-container" onClick={(e) => e.stopPropagation()}>
-        <button className="taskmodal-close-button" onClick={onClose}>
+    <div className="tkm-taskmodal-overlay" onClick={onClose}>
+      <div className="tkm-taskmodal-container" onClick={(e) => e.stopPropagation()}>
+        <button className="tkm-taskmodal-close-button" onClick={onClose}>
           &times;
         </button>
 
-        <div className="taskmodal-grid">
-          <div className="taskmodal-info">
-            <div className="taskmodal-image-wrapper">
+        <div className="tkm-taskmodal-grid">
+          <div className="tkm-taskmodal-info">
+            <div className="tkm-taskmodal-image-wrapper">
               {imagemRelativa ? (
                 <img
                   src={imagemRelativa}
                   alt="Imagem da vaga"
-                  className="taskmodal-image"
+                  className="tkm-taskmodal-image"
                 />
               ) : (
-                <div className="taskmodal-no-image">Sem imagem</div>
+                <div className="tkm-taskmodal-no-image">Sem imagem</div>
               )}
             </div>
-
             <h2>Descrição da Vaga</h2>
-            <p className="taskmodal-descricao">{vaga.descricao}</p>
+            <p className="tkm-taskmodal-descricao">{vaga.descricao}</p>
           </div>
 
-          <div className="taskmodal-form-area">
+          <div className="tkm-taskmodal-form-area">
             <h2>Adicionar Tarefa</h2>
-            <form onSubmit={onSubmit} className="taskmodal-form">
+            <form onSubmit={onSubmit} className="tkm-taskmodal-form">
               <input
                 type="text"
                 value={titulo}
                 onChange={(e) => setTitulo(e.target.value)}
                 placeholder="Título da tarefa"
                 required
-                className="taskmodal-input"
+                className="tkm-taskmodal-input"
               />
 
               <select
                 value={frequencia}
                 onChange={(e) => setFrequencia(e.target.value)}
                 required
-                className="taskmodal-input"
+                className="tkm-taskmodal-input"
               >
                 <option value="">Frequência</option>
                 <option value="diaria">Diária</option>
@@ -103,17 +110,17 @@ const TaskModal = ({
                 onChange={(e) => setDescricao(e.target.value)}
                 placeholder="Descrição da tarefa"
                 required
-                className="taskmodal-input"
+                className="tkm-taskmodal-input"
               />
 
-              <button type="submit" className="taskmodal-button">
+              <button type="submit" className="tkm-taskmodal-button">
                 Adicionar Tarefa
               </button>
             </form>
 
-            <hr className="taskmodal-divider" />
+            <hr className="tkm-taskmodal-divider" />
 
-            <div className="taskmodal-tarefas-list">
+            <div className="tkm-taskmodal-tarefas-list">
               <h3>Tarefas Cadastradas</h3>
               {tarefas.length > 0 ? (
                 <ul>
@@ -124,8 +131,8 @@ const TaskModal = ({
                         <p>{tarefa.descricao}</p>
                       </div>
                       <button
-                        className="taskmodal-delete-button"
-                        onClick={() => onDelete(tarefa._id)}
+                        className="tkm-taskmodal-delete-button"
+                        onClick={() => confirmarExclusao(tarefa._id)}
                       >
                         Excluir
                       </button>
@@ -138,6 +145,24 @@ const TaskModal = ({
             </div>
           </div>
         </div>
+
+        {/* Modal de Confirmação de Exclusão */}
+        {tarefaParaExcluir && (
+          <div className="tkm-confirm-modal-overlay">
+            <div className="tkm-confirm-modal">
+              <h3>Confirmar Exclusão</h3>
+              <p>Você tem certeza que deseja excluir esta tarefa?</p>
+              <div className="tkm-confirm-modal-buttons">
+                <button className="tkm-confirm-button" onClick={excluirTarefa}>
+                  Sim, excluir
+                </button>
+                <button className="tkm-cancel-button" onClick={cancelarExclusao}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
