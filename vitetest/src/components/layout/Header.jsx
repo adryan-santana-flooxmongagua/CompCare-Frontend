@@ -11,11 +11,35 @@ const Header = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedRole = localStorage.getItem('role');
-    setIsAuthenticated(!!token);
-    setRole(storedRole);
-  }, [location]);
+  const token = localStorage.getItem('token');
+  const storedRole = localStorage.getItem('role');
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const exp = payload.exp * 1000;
+
+      if (Date.now() > exp) {
+        // Token expirado
+        localStorage.clear();
+        setIsAuthenticated(false);
+        setRole(null);
+        navigate('/login');
+        return;
+      }
+    } catch (e) {
+      console.error("Token inválido ou corrompido");
+      localStorage.clear();
+      setIsAuthenticated(false);
+      setRole(null);
+      navigate('/login');
+      return;
+    }
+  }
+
+  setIsAuthenticated(!!token);
+  setRole(storedRole);
+}, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');

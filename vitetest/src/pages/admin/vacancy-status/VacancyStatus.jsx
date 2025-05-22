@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminSidebar from "../aside/Aside";
 import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
-import { getImagemPorTipo } from "../../../utils/imagemPorTipo"; 
+import { getImagemPorTipo } from "../../../utils/imagemPorTipo";
 import FormVaga from "./forms/VacancyForm";
 import "./VacancyStatus.css";
 
@@ -83,7 +83,10 @@ const StatusVaga = () => {
           <div className="modal-content">
             <h3>Deseja realmente excluir esta vaga?</h3>
             <div className="modal-buttons">
-              <button className="btn-cancel" onClick={() => setShowModal(false)}>
+              <button
+                className="btn-cancel"
+                onClick={() => setShowModal(false)}
+              >
                 Cancelar
               </button>
               <button className="btn-confirm" onClick={confirmarExclusao}>
@@ -121,6 +124,8 @@ const StatusVaga = () => {
                     ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
                     : null;
 
+                  const quantidadeCandidatos = vaga.totalCandidaturas || 0;
+
                   return (
                     <div key={vaga._id} className="vaga-card">
                       {imagem ? (
@@ -132,15 +137,19 @@ const StatusVaga = () => {
                       ) : (
                         <div className="vaga-no-image">Sem imagem</div>
                       )}
+
                       <div className="vaga-info">
                         <h3 className="vaga-title">{vaga.titulodavaga}</h3>
                         <p className="vaga-type">Tipo: {vaga.tipo_vaga}</p>
                         <p className="vaga-status">Status: {vaga.status}</p>
                         <p className="vaga-points">Pontos: {vaga.vl_pontos}</p>
-                        <p className="vaga-quantity">Qtd. Vagas: {vaga.qtd_vagas}</p>
-                        <p className="vaga-candidatos">
-                          Voluntários Alistados: {vaga.candidatos?.length || 0}
+                        <p className="vaga-quantity">
+                          Qtd. Vagas: {vaga.qtd_vagas}
                         </p>
+                        <p className="vaga-candidatos">
+                          Voluntários Alistados: {quantidadeCandidatos}
+                        </p>
+
                         <div className="vaga-actions">
                           <button
                             onClick={() => handleEdit(vaga._id)}
