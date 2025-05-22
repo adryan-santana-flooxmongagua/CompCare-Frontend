@@ -8,6 +8,7 @@ import "./Newtask.css";
 const NewTask = () => {
   const [vagas, setVagas] = useState([]);
   const [vagaSelecionada, setVagaSelecionada] = useState(null);
+  const [titulo, setTitulo] = useState("");
   const [descricao, setDescricao] = useState("");
   const [frequencia, setFrequencia] = useState("diaria");
   const [tarefas, setTarefas] = useState([]);
@@ -56,6 +57,7 @@ const NewTask = () => {
         },
         body: JSON.stringify({
           vagaId: vagaSelecionada._id,
+          titulo,
           descricao,
           frequencia,
         }),
@@ -66,12 +68,13 @@ const NewTask = () => {
         throw new Error(erro.message || "Erro ao criar tarefa");
       }
 
+      setTitulo("");
       setDescricao("");
       setFrequencia("diaria");
 
-      const atualizadas = await fetch(
-        `${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`
-      );
+      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
@@ -92,9 +95,9 @@ const NewTask = () => {
 
       if (!res.ok) throw new Error("Erro ao excluir tarefa");
 
-      const atualizadas = await fetch(
-        `${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`
-      );
+      const atualizadas = await fetch(`${API_BASE_URL}/tasks/vaga/${vagaSelecionada._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await atualizadas.json();
       setTarefas(data);
     } catch (error) {
@@ -138,13 +141,17 @@ const NewTask = () => {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             vaga={vagaSelecionada}
+            titulo={titulo}
+            setTitulo={setTitulo}
             descricao={descricao}
             setDescricao={setDescricao}
             frequencia={frequencia}
             setFrequencia={setFrequencia}
             tarefas={tarefas}
+            setTarefas={setTarefas}
             onSubmit={handleSubmit}
             onDelete={handleDelete}
+            token={localStorage.getItem("token")}
           />
         )}
       </main>

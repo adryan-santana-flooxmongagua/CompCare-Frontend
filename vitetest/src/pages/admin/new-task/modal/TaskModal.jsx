@@ -1,5 +1,5 @@
 import React from "react";
-import { API_BASE_IMAGE_URL } from "../../../../config/api";
+import { API_BASE_URL,API_BASE_IMAGE_URL } from "../../../../config/api";
 import { getImagemPorTipo } from "../../../../utils/imagemPorTipo";
 import "./TaskModal.css";
 
@@ -14,8 +14,9 @@ const TaskModal = ({
   frequencia,
   setFrequencia,
   tarefas,
+  setTarefas,
   onSubmit,
-  onDelete,
+  token, // opcional: caso você use autenticação
 }) => {
   if (!isOpen || !vaga) return null;
 
@@ -24,6 +25,29 @@ const TaskModal = ({
     : getImagemPorTipo(vaga.tipo_vaga)
     ? `${API_BASE_IMAGE_URL}${getImagemPorTipo(vaga.tipo_vaga)}`
     : null;
+
+ const onDelete = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erro ao excluir tarefa");
+    }
+
+    setTarefas((prev) => prev.filter((tarefa) => tarefa._id !== id));
+  } catch (error) {
+    console.error("Erro ao excluir tarefa:", error);
+    alert(`Erro: ${error.message}`);
+  }
+};
+
 
   return (
     <div className="taskmodal-overlay" onClick={onClose}>
