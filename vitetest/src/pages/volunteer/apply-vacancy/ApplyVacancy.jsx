@@ -5,21 +5,19 @@ import './ApplyVacancy.css';
 const VagasCandidatadas = () => {
   const [candidaturas, setCandidaturas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [vagaSelecionada, setVagaSelecionada] = useState(null);
 
   useEffect(() => {
     const fetchCandidaturas = async () => {
       try {
         const token = localStorage.getItem('token');
-
         if (!token) {
           alert('Você precisa estar logado.');
           return;
         }
 
         const response = await fetch(`${API_BASE_URL}/candidaturas/minhas`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = await response.json();
@@ -40,16 +38,14 @@ const VagasCandidatadas = () => {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE_URL}/candidaturas/confirmar/${id}`, {
         method: 'PATCH',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("Erro ao confirmar participação");
 
       setCandidaturas((prev) =>
         prev.map((c) => (c._id === id ? { ...c, status: 'confirmado' } : c))
       );
-    } catch (err) {
+    } catch {
       alert("Erro ao confirmar participação");
     }
   };
@@ -59,14 +55,12 @@ const VagasCandidatadas = () => {
       const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE_URL}/candidaturas/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("Erro ao excluir candidatura");
 
       setCandidaturas((prev) => prev.filter((c) => c._id !== id));
-    } catch (err) {
+    } catch {
       alert("Erro ao excluir candidatura");
     }
   };
@@ -95,6 +89,10 @@ const VagasCandidatadas = () => {
                 <p className="vaga-desc">{candidatura.vaga?.descricao || 'Sem descrição'}</p>
                 <p className="vaga-status">Status da candidatura: <strong>{candidatura.status}</strong></p>
 
+                <button className="vaga-btn detalhes" onClick={() => setVagaSelecionada(candidatura.vaga)}>
+                  Ver Detalhes
+                </button>
+
                 {candidatura.status === 'aprovado' && (
                   <button className="vaga-btn confirmar" onClick={() => confirmarParticipacao(candidatura._id)}>
                     Confirmar Participação
@@ -102,13 +100,28 @@ const VagasCandidatadas = () => {
                 )}
 
                 {candidatura.status === 'recusada' && (
-                 <button className="vaga-btn excluir" onClick={() => excluirCandidatura(candidatura._id)}>
-                 Excluir Candidatura
-               </button>
+                  <button className="vaga-btn excluir" onClick={() => excluirCandidatura(candidatura._id)}>
+                    Excluir Candidatura
+                  </button>
                 )}
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {vagaSelecionada && (
+        <div className="modal-overlay" onClick={() => setVagaSelecionada(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>{vagaSelecionada.titulodavaga}</h2>
+            <p><strong>Descrição:</strong> {vagaSelecionada.descricao}</p>
+            <p><strong>Categoria:</strong> {vagaSelecionada.categoria || 'Não informada'}</p>
+            <p><strong>Local:</strong> {vagaSelecionada.local || 'Não informado'}</p>
+            <p><strong>Data:</strong> {vagaSelecionada.data || 'Não informada'}</p>
+            <button onClick={() => setVagaSelecionada(null)} className="vaga-btn fechar">
+              Fechar
+            </button>
+          </div>
         </div>
       )}
     </div>

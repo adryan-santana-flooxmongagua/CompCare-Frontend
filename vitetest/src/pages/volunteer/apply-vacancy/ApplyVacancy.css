@@ -111,3 +111,60 @@
 .vaga-btn.excluir:hover {
   background-color: #c62828;
 }
+
+
+.vaga-btn.detalhes {
+  background-color: #007bff;
+}
+
+.vaga-btn.detalhes:hover {
+  background-color: #0056b3;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+   background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+.modal-content strong {
+  color: #222;
+}
+
+.modal-content p,
+.modal-content span {
+  color: #444; 
+}
+
+.modal-content p {
+  margin: 8px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+
+.vaga-btn.fechar {
+  background-color: #777;
+  margin-top: 20px;
+}
+
+.vaga-btn.fechar:hover {
+  background-color: #555;
+}
