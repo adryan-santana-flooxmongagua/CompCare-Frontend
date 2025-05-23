@@ -3,33 +3,54 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #121212;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .pontuacao-card {
-  background: #1f1f1f;
-  color: #fff;
-  padding: 40px 60px;
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   text-align: center;
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
+  border: 1px solid #334155;
+  position: relative;
+  overflow: hidden;
 }
 
 .icone-trofeu {
-  font-size: 50px;
-  margin-bottom: 15px;
+  font-size: 48px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .titulo {
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 8px;
 }
 
 .pontuacao {
-  font-size: 36px;
-  font-weight: bold;
-  color: #ffd700;
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: #facc15;
+  margin-top: 10px;
+}
+
+/* Animação suave para carregamento */
+.pontuacao-card p.pontuacao {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
