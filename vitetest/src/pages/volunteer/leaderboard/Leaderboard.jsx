@@ -1,25 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
 import "./Leaderboard.css";
 
-const mockVoluntarios = [
-  { nome: "Hoier", pontos: 200 }, // Primeiro lugar
-  { nome: "Larissa Martinez", pontos: 180 },
-  { nome: "Larissa Andrade", pontos: 170 },
-  { nome: "Gabriel Moura", pontos: 160 },
-  { nome: "Kewin", pontos: 150 },
-  { nome: "Isa Aguiar", pontos: 140 },
-  { nome: "Adryz", pontos: 10 },
-  { nome: "Guilherme Santinelli", pontos: 120 },
-  { nome: "Joyce", pontos: 110 },
-  { nome: "Brenda Tsutake", pontos: 100 },
-  { nome: "Tigras", pontos: 90 },
-  { nome: "Carlos", pontos: 80 },
-  { nome: "Cachinhos", pontos: 70 },
-];
-
 const Leaderboard = () => {
-  // Ordenar por pontos (opcional, se quiser garantir)
-  const sorted = [...mockVoluntarios].sort((a, b) => b.pontos - a.pontos);
+  const [voluntarios, setVoluntarios] = useState([]);
+
+  useEffect(() => {
+    const fetchRanking = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/pontuacao/ranking/all`);	
+        const data = await response.json();
+        setVoluntarios(data);
+      } catch (error) {
+        console.error("Erro ao buscar ranking:", error);
+      }
+    };
+
+    fetchRanking();
+  }, []);
 
   return (
     <div className="leaderboard-container">
@@ -33,7 +31,7 @@ const Leaderboard = () => {
           </tr>
         </thead>
         <tbody>
-          {sorted.map((v, index) => (
+          {voluntarios.map((v, index) => (
             <tr
               key={index}
               className={
@@ -47,7 +45,7 @@ const Leaderboard = () => {
               }
             >
               <td>#{index + 1}</td>
-              <td>{v.nome}</td>
+              <td>{v.name}</td>
               <td>{v.pontos}</td>
             </tr>
           ))}
