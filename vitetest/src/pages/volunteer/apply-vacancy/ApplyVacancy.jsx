@@ -129,3 +129,5 @@ const VagasCandidatadas = () => {
 };
 
 export default VagasCandidatadas;
+
+

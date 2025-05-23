@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { API_BASE_URL } from "../../../config/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Mytask.css";
 
 const MyTasks = () => {
@@ -26,6 +28,7 @@ const MyTasks = () => {
         setLoading(false);
       } catch (error) {
         console.error("Erro ao buscar tarefas:", error);
+        toast.error("Erro ao buscar tarefas.");
         setLoading(false);
       }
     };
@@ -54,7 +57,6 @@ const MyTasks = () => {
 
       if (!res.ok) throw new Error("Erro ao concluir tarefa");
 
-      // Atualiza lista de tarefas após conclusão
       const updated = await fetch(`${API_BASE_URL}/tasks/minhas`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -63,10 +65,10 @@ const MyTasks = () => {
 
       const data = await updated.json();
       setTarefas(data);
-      alert("Tarefa marcada como concluída!");
+      toast.success("Tarefa marcada como concluída!");
     } catch (error) {
       console.error("Erro:", error.message);
-      alert("Erro ao concluir tarefa.");
+      toast.error("Erro ao concluir tarefa.");
     }
   };
 
@@ -91,6 +93,7 @@ const MyTasks = () => {
   return (
     <div className="mytask-container">
       <h2 className="mytask-title">Minhas Tarefas</h2>
+      <ToastContainer position="top-right" autoClose={3000} />
       {loading ? (
         <p>Carregando tarefas...</p>
       ) : (
@@ -143,5 +146,3 @@ const MyTasks = () => {
 };
 
 export default MyTasks;
-
-

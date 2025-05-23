@@ -44,14 +44,15 @@ const VagasPublicas = () => {
   }, []);
 
   const handleCandidatar = async (vagaId) => {
-    if (userRole !== 'volunteer') {
-      toast.warning('Você precisa ser um voluntário para se candidatar a vagas.');
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      toast.warning('Você precisa estar logado para se candidatar.');
       return;
     }
 
-    const token = localStorage.getItem('token');
-    if (!token) {
-      toast.warning('Você precisa estar logado para se candidatar.');
+    if (userRole !== 'volunteer') {
+      toast.warning('Você precisa ser um voluntário para se candidatar a vagas.');
       return;
     }
 
@@ -68,10 +69,10 @@ const VagasPublicas = () => {
       const result = await response.json();
 
       if (response.ok) {
-        toast.success(result.message);
+        toast.success(result.message || "Candidatura realizada com sucesso!");
         setCandidaturas(prev => [...prev, vagaId]);
       } else {
-        toast.error(result.message);
+        toast.error(result.message || "Erro ao se candidatar.");
       }
     } catch (error) {
       console.error("Erro ao se candidatar:", error);

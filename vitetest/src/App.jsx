@@ -23,6 +23,7 @@ import NewTask from "./pages/admin/new-task/Newtask";
 // Páginas de voluntário
 import ApplyVacancy from "./pages/volunteer/apply-vacancy/ApplyVacancy";
 import MyTask from "./pages/volunteer/mytask/Mytask";
+import Pointspage from "./pages/volunteer/pointspage/Pointspage";
 
 // Rota protegida e 404
 import PrivateRoute from "./components/private/PrivateRoute";
@@ -112,6 +113,15 @@ const App = () => (
         element={
           <PrivateRoute requiredRole="volunteer">
             <MyTask />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/voluntario/meus-pontos"
+        element={
+          <PrivateRoute requiredRole="volunteer">
+            <Pointspage />
           </PrivateRoute>
         }
       />
