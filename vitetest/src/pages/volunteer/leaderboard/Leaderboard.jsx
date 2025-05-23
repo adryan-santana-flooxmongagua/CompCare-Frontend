@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { API_BASE_URL, API_BASE_IMAGE_URL } from "../../../config/api";
+import { API_BASE_URL } from "../../../config/api";
 import "./Leaderboard.css";
 
 const Leaderboard = () => {
@@ -8,7 +8,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/pontuacao/ranking/all`);	
+        const response = await fetch(`${API_BASE_URL}/pontuacao/ranking/all`);
         const data = await response.json();
         setVoluntarios(data);
       } catch (error) {
@@ -21,7 +21,8 @@ const Leaderboard = () => {
 
   return (
     <div className="leaderboard-container">
-      <h2 className="leaderboard-title">🏆 Ranking de Voluntários</h2>
+      <h2 className="leaderboard-title">🏆 Ranking dos Voluntários Mais Engajados</h2>
+      <p className="leaderboard-subtitle">Veja quem mais contribuiu com ações e tarefas!</p>
       <table className="leaderboard-table">
         <thead>
           <tr>
