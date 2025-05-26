@@ -84,14 +84,7 @@ const TaskModal = ({
           <div className="tkm-taskmodal-form-area">
             <h2>Adicionar Tarefa</h2>
             <form onSubmit={onSubmit} className="tkm-taskmodal-form">
-              <input
-                type="text"
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                placeholder="Título da tarefa"
-                required
-                className="tkm-taskmodal-input"
-              />
+            
 
               <select
                 value={frequencia}
